@@ -8,7 +8,7 @@
 		<version>3.2.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.tataconsultancy</groupId>
+	<groupId>com.develop</groupId>
 	<artifactId>microservicio-cliente-persona</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>microservicio-cliente-persona</name>
