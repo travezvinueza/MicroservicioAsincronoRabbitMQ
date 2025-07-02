@@ -2,13 +2,16 @@ package com.develop.clientepersona.service;
 
 import com.develop.clientepersona.dto.ClienteDTO;
 import com.develop.clientepersona.entity.Cliente;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ClienteResponseProducerService {
     @Value("${spring.rabbitmq.response.exchange}")
     private String exchange;
@@ -17,14 +20,15 @@ public class ClienteResponseProducerService {
     private String routingKey;
 
     private final RabbitTemplate rabbitTemplate;
-
-    public ClienteResponseProducerService(RabbitTemplate rabbitTemplate) {
-        this.rabbitTemplate = rabbitTemplate;
-    }
+    private final ModelMapper modelMapper;
 
     public void responseCliente(Cliente cliente) {
-        ClienteDTO clienteDTO = new ClienteDTO(cliente.getId(), cliente.getCreationDate(), cliente.getNombre(), cliente.getGenderPerson(), cliente.getEdad(), cliente.getIdentificacion(),cliente.getDireccion(),cliente.getTelefono(),cliente.getPassword(), cliente.isEstado());
-        log.info(String.format("Cliente enviado %s", clienteDTO));
-        rabbitTemplate.convertAndSend(exchange, routingKey, cliente);
+        ClienteDTO clienteDTO = modelMapper.map(cliente, ClienteDTO.class);
+        try {
+            rabbitTemplate.convertAndSend(exchange, routingKey, clienteDTO);
+            log.info("Cliente enviado correctamente: {}", clienteDTO);
+        } catch (Exception e) {
+            log.error("Error al enviar cliente: {}", e.getMessage(), e);
+        }
     }
 }

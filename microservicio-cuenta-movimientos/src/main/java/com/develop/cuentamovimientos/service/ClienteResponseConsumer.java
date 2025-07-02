@@ -17,7 +17,7 @@ public class ClienteResponseConsumer {
 
     @RabbitListener(queues = "${spring.rabbitmq.response.queue}")
     public void recibirClienteDTO(ClienteDTO clienteDTO) {
-        log.info(String.format("Cliente recibido"));
+        log.info("Cliente recibido: {}", clienteDTO);
         log.info("Cliente: {}", clienteDTO);
 
         clienteDTOCompletableFuture.complete(clienteDTO);

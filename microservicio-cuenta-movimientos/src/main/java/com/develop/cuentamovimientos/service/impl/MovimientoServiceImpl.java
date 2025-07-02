@@ -13,7 +13,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -33,7 +32,7 @@ public class MovimientoServiceImpl implements MovimientoService {
     @Override
     public List<MovimientoDTO> listar() {
         return movimientoRepository.findAll().stream().map(
-                (movimiento )-> modelMapper.map(movimiento,MovimientoDTO.class)).collect(Collectors.toList());
+                movimiento -> modelMapper.map(movimiento,MovimientoDTO.class)).toList();
     }
 
     @Override

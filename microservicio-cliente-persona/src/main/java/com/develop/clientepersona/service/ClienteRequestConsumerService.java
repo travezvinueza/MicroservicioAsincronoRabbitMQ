@@ -19,14 +19,17 @@ public class ClienteRequestConsumerService {
 
     @RabbitListener(queues = "${spring.rabbitmq.request.queue}")
     public void buscarCliente(String identificacion) {
+        if (identificacion == null || identificacion.trim().isEmpty()) {
+            log.warn("Identificación vacía o nula recibida.");
+            return;
+        }
+
         Cliente clienteDb= clienteRepository.findByIdentificacion(identificacion) .orElseThrow(
-                ()-> new RecursoNoEncontradoException(MensajeError.RECURSO_NO_ENCONTRADO.toString())
-        );
-        //enviar a la cola cliente response
+                ()-> new RecursoNoEncontradoException(MensajeError.RECURSO_NO_ENCONTRADO));
 
         clienteResponseService.responseCliente(clienteDb);
 
-        log.info(String.format("Identifiacion: %s recibida", identificacion));
-        log.info("Cliente: {}", clienteDb);
+        log.info("Identificación recibida: {}", identificacion);
+        log.info("Cliente encontrado: {}", clienteDb);
     }
 }

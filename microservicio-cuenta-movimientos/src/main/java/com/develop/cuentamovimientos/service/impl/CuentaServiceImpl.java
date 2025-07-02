@@ -12,7 +12,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -23,14 +22,14 @@ public class CuentaServiceImpl implements CuentaService {
 
     @Override
     public CuentaDTO crear(CuentaDTO cuentaDTO) {
-        Cuenta cuenta= modelMapper.map(cuentaDTO, Cuenta.class);
+        Cuenta cuenta = modelMapper.map(cuentaDTO, Cuenta.class);
         return modelMapper.map(cuentaRepository.save(cuenta),CuentaDTO.class);
     }
 
     @Override
     public List<CuentaDTO> listar() {
         return cuentaRepository.findAll().stream().map(
-                (cuenta)-> modelMapper.map(cuenta,CuentaDTO.class)).collect(Collectors.toList());
+                cuenta-> modelMapper.map(cuenta,CuentaDTO.class)).toList();
     }
 
     @Override
