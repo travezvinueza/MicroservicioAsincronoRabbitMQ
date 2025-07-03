@@ -25,7 +25,11 @@ El proyecto tiene swagger para la documentacion y test de endpoints y pruebas de
 - El segundo servicio se deplega en el puerto 8081
 
 ```
-  http://localhost:8080/api/swagger-ui/index.html#/
+  http://localhost:8081/api/swagger-ui/index.html#/
 ```
 
 ## Imagenes
+![report](https://github.com/user-attachments/assets/f9bd0667-d18f-47e1-b680-fba4db11541c)
+![json](https://github.com/user-attachments/assets/511666fb-fc85-4d9c-9653-ef49683014fa)
+![client](https://github.com/user-attachments/assets/2d503f4a-e92a-4219-a4d3-4d347185d32e)
+![account](https://github.com/user-attachments/assets/fdf07a66-6089-4e58-9c9d-77a39c1821c3)
