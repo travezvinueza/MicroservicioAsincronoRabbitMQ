@@ -1,5 +1,6 @@
 package com.develop.clientepersona.service;
 
+import com.develop.clientepersona.dto.ClienteDTO;
 import com.develop.clientepersona.entity.Cliente;
 import com.develop.clientepersona.entity.MensajeError;
 import com.develop.clientepersona.exception.RecursoNoEncontradoException;
@@ -18,18 +19,21 @@ public class ClienteRequestConsumerService {
 
 
     @RabbitListener(queues = "${spring.rabbitmq.request.queue}")
-    public void buscarCliente(String identificacion) {
-        if (identificacion == null || identificacion.trim().isEmpty()) {
-            log.warn("Identificación vacía o nula recibida.");
-            return;
+    public void buscarCliente(ClienteDTO clienteDTO) {
+        if (clienteDTO.getIdentificacion() != null) {
+            log.info("Buscando por identificación: {}", clienteDTO.getIdentificacion());
+            Cliente clienteDb = clienteRepository.findByIdentificacion(clienteDTO.getIdentificacion())
+                    .orElseThrow(() -> new RecursoNoEncontradoException(MensajeError.RECURSO_NO_ENCONTRADO));
+            clienteResponseService.responseCliente(clienteDb);
+        } else if (clienteDTO.getNombre() != null) {
+            String[] partes = clienteDTO.getNombre().trim().split(" ");
+            String nombre = partes[0];
+
+            Cliente clienteDb = clienteRepository.findByNombre(nombre)
+                    .orElseThrow(() -> new RecursoNoEncontradoException(MensajeError.RECURSO_NO_ENCONTRADO));
+            clienteResponseService.responseCliente(clienteDb);
+        } else {
+            log.warn("Petición vacía recibida");
         }
-
-        Cliente clienteDb= clienteRepository.findByIdentificacion(identificacion).orElseThrow(
-                ()-> new RecursoNoEncontradoException(MensajeError.RECURSO_NO_ENCONTRADO));
-
-        clienteResponseService.responseCliente(clienteDb);
-
-        log.info("Identificación recibida: {}", identificacion);
-        log.info("Cliente encontrado: {}", clienteDb);
     }
 }

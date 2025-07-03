@@ -1,10 +1,12 @@
 package com.develop.cuentamovimientos.service.impl;
 
+import com.develop.cuentamovimientos.dto.ClienteDTO;
 import com.develop.cuentamovimientos.dto.CuentaDTO;
 import com.develop.cuentamovimientos.entity.Cuenta;
 import com.develop.cuentamovimientos.entity.MensajeError;
 import com.develop.cuentamovimientos.exception.RecursoNoEncontradoException;
 import com.develop.cuentamovimientos.repository.CuentaRepository;
+import com.develop.cuentamovimientos.service.ClienteRequestProducerService;
 import com.develop.cuentamovimientos.service.CuentaService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +21,21 @@ import java.util.List;
 public class CuentaServiceImpl implements CuentaService {
     private final CuentaRepository cuentaRepository;
     private final ModelMapper modelMapper;
+    private final ClienteRequestProducerService clienteRequestProducerService;
+
 
     @Override
     public CuentaDTO crear(CuentaDTO cuentaDTO) {
+        // Llamar al microservicio cliente-persona por RabbitMQ
+        ClienteDTO clienteRequest = new ClienteDTO();
+        clienteRequest.setIdentificacion(cuentaDTO.getIdentificacionCliente());
+
+        clienteRequestProducerService.obtenerClientePorIdentificacion(clienteRequest);
+
         Cuenta cuenta = modelMapper.map(cuentaDTO, Cuenta.class);
-        return modelMapper.map(cuentaRepository.save(cuenta),CuentaDTO.class);
+        Cuenta saved = cuentaRepository.save(cuenta);
+
+        return modelMapper.map(saved, CuentaDTO.class);
     }
 
     @Override

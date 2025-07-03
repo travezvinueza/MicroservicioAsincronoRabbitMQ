@@ -27,9 +27,11 @@ public class EstadoCuentaController {
     public ResponseEntity<EstadoCuentaDTO> obtenerEstadoCuenta(
             @RequestParam("fechaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
             @RequestParam("fechaFin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin,
-            @RequestParam("identificacionCliente") String identificacionCliente
+            @RequestParam(value = "identificacionCliente", required = false) String identificacionCliente,
+            @RequestParam("nombre") String nombre
+
     ) throws ExecutionException, InterruptedException {
         log.info("FechInicio, {}", fechaInicio);
-        return new ResponseEntity<>(estadoCuentaService.obtenerEstadoCuenta(fechaInicio, fechaFin, identificacionCliente), HttpStatus.OK);
+        return new ResponseEntity<>(estadoCuentaService.obtenerEstadoCuenta(fechaInicio, fechaFin, identificacionCliente, nombre), HttpStatus.OK);
     }
 }

@@ -1,5 +1,6 @@
 package com.develop.cuentamovimientos.service.impl;
 
+import com.develop.cuentamovimientos.dto.ClienteDTO;
 import com.develop.cuentamovimientos.service.ClienteRequestProducerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +21,9 @@ public class ClienteRequestProducerServiceImpl implements ClienteRequestProducer
     private final RabbitTemplate rabbitTemplate;
 
     @Override
-    public void obtenerClientePorIdentificacion(String identificacion) {
-        log.info("Mensage enviado: {}", identificacion);
-        rabbitTemplate.convertAndSend(exchange, routingKey, identificacion);
-        log.info("Mensage enviado: {}", identificacion);
+    public void obtenerClientePorIdentificacion(ClienteDTO clienteDTO) {
+        log.info("Mensage enviado: {}", clienteDTO.getIdentificacion());
+        rabbitTemplate.convertAndSend(exchange, routingKey, clienteDTO);
+        log.info("Mensage enviado: {}", clienteDTO.getNombre());
     }
 }

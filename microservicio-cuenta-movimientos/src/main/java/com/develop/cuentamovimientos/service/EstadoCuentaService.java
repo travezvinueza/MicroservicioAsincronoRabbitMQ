@@ -24,9 +24,12 @@ public class EstadoCuentaService {
     private final CuentaService cuentaService;
     private final ReporteMovimientoService movimientoService;
 
-    public EstadoCuentaDTO obtenerEstadoCuenta(LocalDate fechaInicio, LocalDate fechaFin, String identificacionCliente) throws ExecutionException, InterruptedException {
+    public EstadoCuentaDTO obtenerEstadoCuenta(LocalDate fechaInicio, LocalDate fechaFin, String identificacionCliente, String nombre)
+            throws ExecutionException, InterruptedException {
         // Enviar la identificación a RabbitMQ
-        clienteRequestService.obtenerClientePorIdentificacion(identificacionCliente);
+        ClienteDTO clienteDTORequest = new ClienteDTO(null, null, nombre, null, 0, identificacionCliente, "", "", "");
+        clienteRequestService.obtenerClientePorIdentificacion(clienteDTORequest);
+
 
         // Obtener el cliente desde RabbitMQ
         CompletableFuture<ClienteDTO> clienteDTOCompletableFuture = clienteResponse.obtenerClienteDTO();
@@ -34,7 +37,7 @@ public class EstadoCuentaService {
         log.info("Final DTO: {}", clienteDTO);
 
         // Obtener las cuentas
-        List<CuentaDTO> cuentasDTO = cuentaService.findByIdentificacionCliente(clienteDTO.identificacion());
+        List<CuentaDTO> cuentasDTO = cuentaService.findByIdentificacionCliente(clienteDTO.getIdentificacion());
 
         // Obtener los movimientos por cuenta
         List<ReporteCuentaMovimientoDTO> reporteCuentaMovimientos = new ArrayList<>();
