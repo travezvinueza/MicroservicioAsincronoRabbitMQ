@@ -14,14 +14,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @AllArgsConstructor
-@Slf4j
 public class MovimientoServiceImpl implements MovimientoService {
 
-    private MovimientoRepository movimientoRepository;
-    private ModelMapper modelMapper;
-    private ValidaRegistroMovimiento actualizaMovimiento;
+    private final MovimientoRepository movimientoRepository;
+    private final ModelMapper modelMapper;
+    private final ValidaRegistroMovimiento actualizaMovimiento;
 
     @Override
     public MovimientoDTO crear(MovimientoDTO movimientoDTO) {

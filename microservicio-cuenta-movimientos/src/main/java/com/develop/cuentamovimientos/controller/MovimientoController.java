@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MovimientoController {
 
-    private MovimientoService movimientoService;
+    private final MovimientoService movimientoService;
 
     @PostMapping
     public ResponseEntity<MovimientoDTO> crear(@RequestBody MovimientoDTO movimientoDTO){
@@ -40,6 +40,4 @@ public class MovimientoController {
     public ResponseEntity <MovimientoDTO> actualizar(@RequestBody MovimientoDTO movimientoDTO){
         return  new ResponseEntity<>(movimientoService.crear(movimientoDTO), HttpStatus.OK);
     }
-
-
 }

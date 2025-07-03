@@ -2,26 +2,29 @@ package com.develop.clientepersona.entity;
 
 import com.develop.clientepersona.enums.GenderPerson;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 
-@Data
 @Entity
-@Table(name = "personas")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "tipo_persona", discriminatorType = DiscriminatorType.STRING)
+@Getter
+@Setter
 @AllArgsConstructor
-public abstract class Persona {
+@NoArgsConstructor
+@Table(name = "personas")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE) // También puedes usar JOINED
+@DiscriminatorColumn(name = "person_type", discriminatorType = DiscriminatorType.STRING)
+public class Persona {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @CreationTimestamp
+    @Column(name = "creation_date")
     private Timestamp creationDate;
     private String nombre;
     @Enumerated(EnumType.STRING)
+    @Column(name = "gender_person")
     private GenderPerson genderPerson;
     private int edad;
     @Column(unique = true)

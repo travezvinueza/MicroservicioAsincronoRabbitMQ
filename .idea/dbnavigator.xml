@@ -20,12 +20,10 @@
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="28c1578d-3979-475d-ad86-2d51375d7943" object-ref="schemas/cuenta_movimientos/tables/movimientos" />
-      <object connection-id="28c1578d-3979-475d-ad86-2d51375d7943" object-ref="schemas/cuenta_movimientos/tables/cuentas" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="28c1578d-3979-475d-ad86-2d51375d7943" dataset="cliente_persona.cliente" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="28c1578d-3979-475d-ad86-2d51375d7943" dataset="cuenta_movimientos.movimientos" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="28c1578d-3979-475d-ad86-2d51375d7943" dataset="cliente_persona.personas" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="28c1578d-3979-475d-ad86-2d51375d7943" dataset="cuenta_movimientos.cuentas" active-filter-id="EMPTY_FILTER" />

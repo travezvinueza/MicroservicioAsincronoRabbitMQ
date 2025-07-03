@@ -14,46 +14,40 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+@Slf4j
 @Service
 @AllArgsConstructor
-@Slf4j
 public class EstadoCuentaService {
 
-    private ClienteRequestProducerService clienteRequestService;
-    private ClienteResponseConsumer clienteResponse;
-    private CuentaService cuentaService;
-    private ReporteMovimientoService movimientoService;
+    private final ClienteRequestProducerService clienteRequestService;
+    private final ClienteResponseConsumer clienteResponse;
+    private final CuentaService cuentaService;
+    private final ReporteMovimientoService movimientoService;
 
-    public EstadoCuentaDTO obtenerEstadoCuenta(LocalDate fechaInicio,LocalDate fechaFin,String identificacionCliente) throws ExecutionException, InterruptedException {
-        //enviar la identificacion a rabitmq
+    public EstadoCuentaDTO obtenerEstadoCuenta(LocalDate fechaInicio, LocalDate fechaFin, String identificacionCliente) throws ExecutionException, InterruptedException {
+        // Enviar la identificación a RabbitMQ
         clienteRequestService.obtenerClientePorIdentificacion(identificacionCliente);
 
-        //obtener el cliente desde rabittmq
+        // Obtener el cliente desde RabbitMQ
         CompletableFuture<ClienteDTO> clienteDTOCompletableFuture = clienteResponse.obtenerClienteDTO();
-        log.info("final dto , {}", clienteDTOCompletableFuture.get());
+        ClienteDTO clienteDTO = clienteDTOCompletableFuture.get();
+        log.info("Final DTO: {}", clienteDTO);
 
-        //obtener las cuentas
-        List<CuentaDTO> cuentasDTO = cuentaService.findByIdentificacionCliente(clienteDTOCompletableFuture.get().identificacion());
+        // Obtener las cuentas
+        List<CuentaDTO> cuentasDTO = cuentaService.findByIdentificacionCliente(clienteDTO.identificacion());
 
-        //obtener los movimientos por cuenta
+        // Obtener los movimientos por cuenta
         List<ReporteCuentaMovimientoDTO> reporteCuentaMovimientos = new ArrayList<>();
-
-        for (CuentaDTO cuentaDTO : cuentasDTO
-        ) {
+        for (CuentaDTO cuentaDTO : cuentasDTO) {
             ReporteCuentaMovimientoDTO reporteCuentaMovimiento = new ReporteCuentaMovimientoDTO();
             reporteCuentaMovimiento.setCuentaDTO(cuentaDTO);
             reporteCuentaMovimiento.setMovimientoDTO(
                     movimientoService.obtenerMovimientosEntreFechasPorCuenta(fechaInicio, fechaFin, cuentaDTO.getNumeroCuenta())
             );
             reporteCuentaMovimientos.add(reporteCuentaMovimiento);
-
         }
 
-        EstadoCuentaDTO estadoCuentaDTO = new EstadoCuentaDTO(clienteDTOCompletableFuture.get(),
-                reporteCuentaMovimientos
-        );
-        return estadoCuentaDTO;
-
+        // Devolver directamente el nuevo DTO sin asignarlo a una variable local
+        return new EstadoCuentaDTO(clienteDTO, reporteCuentaMovimientos);
     }
-
 }

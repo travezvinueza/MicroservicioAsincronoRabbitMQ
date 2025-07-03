@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @AllArgsConstructor
-@Slf4j
 public class CuentaServiceImpl implements CuentaService {
-    private CuentaRepository cuentaRepository;
-    private ModelMapper modelMapper;
+    private final CuentaRepository cuentaRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public CuentaDTO crear(CuentaDTO cuentaDTO) {

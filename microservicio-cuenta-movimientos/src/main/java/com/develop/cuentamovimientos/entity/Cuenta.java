@@ -2,15 +2,14 @@ package com.develop.cuentamovimientos.entity;
 
 import com.develop.cuentamovimientos.enums.AccountType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Table(name = "cuentas")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "cuentas")
 public class Cuenta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +17,7 @@ public class Cuenta {
     @Column(unique = true)
     private String numeroCuenta;
     @Enumerated(EnumType.STRING)
+    @Column(name = "account_type")
     private AccountType accountType;
     private double saldoInicial;
     private boolean estado;

@@ -19,7 +19,6 @@ public class ValidaRegistroMovimiento {
     private MovimientoRepository movimientoRepository;
     private CuentaRepository cuentaRepository;
 
-
     public Movimiento actualizarSaldoMovimiento(Movimiento movimiento) {
         // Validar tipo de transacción
         if (movimiento.getTransactionType() != TransactionType.DEPOSITO &&
@@ -57,6 +56,5 @@ public class ValidaRegistroMovimiento {
 
         return movimiento;
     }
-
 
 }

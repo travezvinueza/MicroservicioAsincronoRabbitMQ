@@ -24,7 +24,7 @@ public class ClienteRequestConsumerService {
             return;
         }
 
-        Cliente clienteDb= clienteRepository.findByIdentificacion(identificacion) .orElseThrow(
+        Cliente clienteDb= clienteRepository.findByIdentificacion(identificacion).orElseThrow(
                 ()-> new RecursoNoEncontradoException(MensajeError.RECURSO_NO_ENCONTRADO));
 
         clienteResponseService.responseCliente(clienteDb);

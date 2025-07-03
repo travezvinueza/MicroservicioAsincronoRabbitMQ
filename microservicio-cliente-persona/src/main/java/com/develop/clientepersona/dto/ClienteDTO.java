@@ -19,6 +19,7 @@ public class ClienteDTO {
     private Timestamp creationDate;
     @NotBlank(message = "El campo nombre no debe estar en blanco")
     private String nombre;
+    @NotNull(message = "El género es obligatorio")
     private GenderPerson genderPerson;
     @Positive(message="El campo edad debe ser un valor positivo")
     @Max(value = 120, message="El campo edad debe estar en en un rango de entre 1 y 120 años")

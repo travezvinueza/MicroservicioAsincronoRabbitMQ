@@ -12,8 +12,8 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class ReporteMovimientoService {
-    private MovimientoRepository movimientoRepository;
-    private ModelMapper modelMapper;
+    private final MovimientoRepository movimientoRepository;
+    private final ModelMapper modelMapper;
 
     public List<MovimientoDTO> obtenerMovimientosEntreFechasPorCuenta(LocalDate fechaInicio, LocalDate fechaFin, String numeroCuenta) {
         return movimientoRepository.obtenerMovimientosEntreFechasPorCuenta(fechaInicio, fechaFin, numeroCuenta).stream().map(

@@ -2,17 +2,16 @@ package com.develop.cuentamovimientos.entity;
 
 import com.develop.cuentamovimientos.enums.TransactionType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "movimientos")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "movimientos")
 public class Movimiento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +22,5 @@ public class Movimiento {
     private TransactionType transactionType;
     private double valor;
     private double saldo;
-
     private String numeroCuenta;
-
 }

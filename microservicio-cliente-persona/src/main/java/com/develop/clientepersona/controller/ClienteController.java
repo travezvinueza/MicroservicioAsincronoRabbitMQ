@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ClienteController {
 
-    private ClienteService clienteService;
+    private final ClienteService clienteService;
 
     @PostMapping
     public ResponseEntity <ClienteDTO> crear(@RequestBody @Valid ClienteDTO clienteDTO){

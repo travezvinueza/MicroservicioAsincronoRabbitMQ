@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CuentaController {
 
-    private CuentaService cuentaService;
+    private final CuentaService cuentaService;
 
     @PostMapping
     public ResponseEntity<CuentaDTO> crear(@RequestBody @Valid CuentaDTO cuentaDTO){
@@ -42,6 +42,4 @@ public class CuentaController {
 
         return  new ResponseEntity<>(cuentaService.actualizar(cuentaDTO), HttpStatus.OK);
     }
-
-
 }

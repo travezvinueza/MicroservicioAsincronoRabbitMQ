@@ -21,9 +21,9 @@ import java.util.List;
 @AllArgsConstructor
 public class ClienteServiceImpl implements ClienteService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private ClienteRepository clienteRepository;
-    private ModelMapper modelMapper;
-    private ValidarIdentificacionCedula validarIdentificacionCedula;
+    private final ClienteRepository clienteRepository;
+    private final ModelMapper modelMapper;
+    private final ValidarIdentificacionCedula validarIdentificacionCedula;
 
     @Override
     public ClienteDTO crear(ClienteDTO clienteDTO) {

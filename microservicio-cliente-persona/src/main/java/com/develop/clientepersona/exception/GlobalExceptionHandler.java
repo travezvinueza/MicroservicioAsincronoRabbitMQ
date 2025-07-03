@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -23,7 +22,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, List<String>>> handleValidacionesErroresDTO(MethodArgumentNotValidException ex) {
         List<String> errors = ex.getBindingResult().getFieldErrors()
-                .stream().map(FieldError::getDefaultMessage).collect(Collectors.toList());
+                .stream().map(FieldError::getDefaultMessage).toList();
         return new ResponseEntity<>(getErrorsMap(errors), HttpStatus.BAD_REQUEST);
     }
 

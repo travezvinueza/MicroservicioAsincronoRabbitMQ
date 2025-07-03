@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.util.concurrent.ExecutionException;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/reportes")
 @AllArgsConstructor
-@Slf4j
 public class EstadoCuentaController {
 
-    private EstadoCuentaService estadoCuentaService;
+    private final EstadoCuentaService estadoCuentaService;
 
     @GetMapping
     public ResponseEntity<EstadoCuentaDTO> obtenerEstadoCuenta(
@@ -30,7 +30,6 @@ public class EstadoCuentaController {
             @RequestParam("identificacionCliente") String identificacionCliente
     ) throws ExecutionException, InterruptedException {
         log.info("FechInicio, {}", fechaInicio);
-        ;
         return new ResponseEntity<>(estadoCuentaService.obtenerEstadoCuenta(fechaInicio, fechaFin, identificacionCliente), HttpStatus.OK);
     }
 }
