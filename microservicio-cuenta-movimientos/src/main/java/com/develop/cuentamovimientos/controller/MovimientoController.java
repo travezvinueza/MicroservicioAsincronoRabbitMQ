@@ -1,12 +1,15 @@
 package com.develop.cuentamovimientos.controller;
 
+import com.develop.cuentamovimientos.dto.MovimientoClienteReporteDTO;
 import com.develop.cuentamovimientos.dto.MovimientoDTO;
 import com.develop.cuentamovimientos.service.MovimientoService;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -40,4 +43,17 @@ public class MovimientoController {
     public ResponseEntity <MovimientoDTO> actualizar(@RequestBody MovimientoDTO movimientoDTO){
         return  new ResponseEntity<>(movimientoService.crear(movimientoDTO), HttpStatus.OK);
     }
+
+    @GetMapping("/movimientos-por-fecha")
+    public ResponseEntity<List<MovimientoClienteReporteDTO>> obtenerMovimientosClientePorFechas(
+            @RequestParam("fechaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
+            @RequestParam("fechaFin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin,
+            @RequestParam(required = false) String identificacion,
+            @RequestParam(required = false) String nombre
+    ) {
+        List<MovimientoClienteReporteDTO> movimientos =
+                movimientoService.obtenerMovimientosPorFechasYCliente(fechaInicio, fechaFin, identificacion, nombre);
+        return ResponseEntity.ok(movimientos);
+    }
+
 }

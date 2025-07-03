@@ -29,6 +29,7 @@ public class CuentaServiceImpl implements CuentaService {
         // Llamar al microservicio cliente-persona por RabbitMQ
         ClienteDTO clienteRequest = new ClienteDTO();
         clienteRequest.setIdentificacion(cuentaDTO.getIdentificacionCliente());
+        clienteRequest.setNombre(cuentaDTO.getNombre());
 
         clienteRequestProducerService.obtenerClientePorIdentificacion(clienteRequest);
 

@@ -27,9 +27,10 @@ public class EstadoCuentaService {
     public EstadoCuentaDTO obtenerEstadoCuenta(LocalDate fechaInicio, LocalDate fechaFin, String identificacionCliente, String nombre)
             throws ExecutionException, InterruptedException {
         // Enviar la identificación a RabbitMQ
-        ClienteDTO clienteDTORequest = new ClienteDTO(null, null, nombre, null, 0, identificacionCliente, "", "", "");
+        ClienteDTO clienteDTORequest = new ClienteDTO();
+        clienteDTORequest.setIdentificacion(identificacionCliente);
+        clienteDTORequest.setNombre(nombre);
         clienteRequestService.obtenerClientePorIdentificacion(clienteDTORequest);
-
 
         // Obtener el cliente desde RabbitMQ
         CompletableFuture<ClienteDTO> clienteDTOCompletableFuture = clienteResponse.obtenerClienteDTO();

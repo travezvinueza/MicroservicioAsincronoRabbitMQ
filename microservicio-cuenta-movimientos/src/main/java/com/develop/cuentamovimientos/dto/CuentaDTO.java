@@ -20,4 +20,6 @@ public class CuentaDTO {
     private boolean estado;
     @NotBlank(message = "La identificacion no debe estar en blanco")
     private String identificacionCliente;
+    @NotBlank(message = "El nombre no debe estar en blanco")
+    private String nombre;
 }
