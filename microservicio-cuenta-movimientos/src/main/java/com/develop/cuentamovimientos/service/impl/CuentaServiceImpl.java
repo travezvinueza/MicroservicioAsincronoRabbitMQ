@@ -4,6 +4,7 @@ import com.develop.cuentamovimientos.dto.ClienteDTO;
 import com.develop.cuentamovimientos.dto.CuentaDTO;
 import com.develop.cuentamovimientos.entity.Cuenta;
 import com.develop.cuentamovimientos.entity.MensajeError;
+import com.develop.cuentamovimientos.exception.CuentaNoEncontradaException;
 import com.develop.cuentamovimientos.exception.RecursoNoEncontradoException;
 import com.develop.cuentamovimientos.repository.CuentaRepository;
 import com.develop.cuentamovimientos.service.ClienteRequestProducerService;
@@ -31,7 +32,7 @@ public class CuentaServiceImpl implements CuentaService {
     @Override
     public CuentaDTO crear(CuentaDTO cuentaDTO) {
         if (cuentaRepository.findByNumeroCuenta(cuentaDTO.getNumeroCuenta()).isPresent()) {
-            throw new RuntimeException("❌ El número de cuenta ya existe");
+            throw new CuentaNoEncontradaException("❌ El número de cuenta ya existe");
         }
         // Llamar al microservicio cliente-persona por RabbitMQ
         ClienteDTO clienteRequest = new ClienteDTO();

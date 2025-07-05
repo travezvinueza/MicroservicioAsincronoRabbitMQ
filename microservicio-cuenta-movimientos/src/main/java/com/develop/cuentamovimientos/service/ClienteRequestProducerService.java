@@ -27,6 +27,5 @@ public class ClienteRequestProducerService {
         } catch (Exception e) {
             log.error("Error al enviar mensaje: {}", e.getMessage(), e);
         }
-
     }
 }

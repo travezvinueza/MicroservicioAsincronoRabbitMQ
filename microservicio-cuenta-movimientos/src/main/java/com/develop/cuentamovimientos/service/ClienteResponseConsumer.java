@@ -12,8 +12,8 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 @Getter
 public class ClienteResponseConsumer {
-    private CompletableFuture<ClienteDTO> clienteDTOCompletableFuture = new CompletableFuture<>();
 
+    private CompletableFuture<ClienteDTO> clienteDTOCompletableFuture = new CompletableFuture<>();
 
     @RabbitListener(queues = "${spring.rabbitmq.response.queue}")
     public void recibirClienteDTO(ClienteDTO clienteDTO) {
@@ -27,5 +27,4 @@ public class ClienteResponseConsumer {
     public CompletableFuture<ClienteDTO> obtenerClienteDTO() {
         return clienteDTOCompletableFuture;
     }
-
 }

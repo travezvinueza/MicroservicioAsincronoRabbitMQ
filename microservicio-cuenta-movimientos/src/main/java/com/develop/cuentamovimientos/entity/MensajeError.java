@@ -7,6 +7,6 @@ public class MensajeError {
     public static final String TIPO_TRANSACCION_NO_VALIDA = "El tipo de transaccion no es valida: valores aceptados DEPOSITO/RETIRO";
     public static final String SALDO_INSUFICIENTE="Saldo insuficiente";
     public static final String CUENTA_NO_ENCONTRADA = "Cuenta no encontrada";
-    public final static String VALOR_YA_REGISTRADO = "Campo ya registrado";
-    public final static String FORMATO_JSON_MALFORMADO = "Formtato JSON mal formado";
+    public static final String VALOR_YA_REGISTRADO = "Campo ya registrado";
+    public static final String FORMATO_JSON_MALFORMADO = "Formtato JSON mal formado";
 }
