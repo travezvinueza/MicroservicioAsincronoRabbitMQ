@@ -1,6 +1,5 @@
 package com.develop.cuentamovimientos.service;
 
-import com.develop.cuentamovimientos.dto.MovimientoClienteReporteDTO;
 import com.develop.cuentamovimientos.dto.MovimientoDTO;
 
 import java.time.LocalDate;
@@ -13,6 +12,5 @@ public interface MovimientoService {
     MovimientoDTO actualizar(MovimientoDTO movimientoDTO);
     void eliminarPorId(Long id);
 
-//    List<MovimientoClienteReporteDTO> obtenerMovimientosPorFechasYCliente(LocalDate fechaInicio, LocalDate fechaFin, String identificacion, String nombre);
     List<MovimientoDTO> obtenerMovimientosEntreFechasPorCuenta(LocalDate fechaInicio, LocalDate fechaFin, String numeroCuenta);
 }
