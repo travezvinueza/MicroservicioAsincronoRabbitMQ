@@ -1,7 +1,7 @@
 package com.develop.cuentamovimientos.controller;
 
 import com.develop.cuentamovimientos.dto.EstadoCuentaDTO;
-import com.develop.cuentamovimientos.service.*;
+import com.develop.cuentamovimientos.service.EstadoCuentaService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;

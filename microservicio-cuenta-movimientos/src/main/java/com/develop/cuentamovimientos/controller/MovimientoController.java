@@ -44,16 +44,16 @@ public class MovimientoController {
         return  new ResponseEntity<>(movimientoService.crear(movimientoDTO), HttpStatus.OK);
     }
 
-    @GetMapping("/movimientos-por-fecha")
-    public ResponseEntity<List<MovimientoClienteReporteDTO>> obtenerMovimientosClientePorFechas(
-            @RequestParam("fechaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
-            @RequestParam("fechaFin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin,
-            @RequestParam(required = false) String identificacion,
-            @RequestParam(required = false) String nombre
-    ) {
-        List<MovimientoClienteReporteDTO> movimientos =
-                movimientoService.obtenerMovimientosPorFechasYCliente(fechaInicio, fechaFin, identificacion, nombre);
-        return ResponseEntity.ok(movimientos);
-    }
+//    @GetMapping("/movimientos-por-fecha")
+//    public ResponseEntity<List<MovimientoClienteReporteDTO>> obtenerMovimientosClientePorFechas(
+//            @RequestParam("fechaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
+//            @RequestParam("fechaFin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin,
+//            @RequestParam(required = false) String identificacion,
+//            @RequestParam(required = false) String nombre
+//    ) {
+//        List<MovimientoClienteReporteDTO> movimientos =
+//                movimientoService.obtenerMovimientosPorFechasYCliente(fechaInicio, fechaFin, identificacion, nombre);
+//        return ResponseEntity.ok(movimientos);
+//    }
 
 }

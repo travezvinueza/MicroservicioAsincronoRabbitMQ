@@ -9,6 +9,7 @@ import com.develop.cuentamovimientos.entity.Movimiento;
 import com.develop.cuentamovimientos.exception.RecursoNoEncontradoException;
 import com.develop.cuentamovimientos.repository.MovimientoRepository;
 import com.develop.cuentamovimientos.service.*;
+import com.develop.cuentamovimientos.util.ValidaRegistroMovimiento;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -29,10 +30,10 @@ public class MovimientoServiceImpl implements MovimientoService {
     private final ModelMapper modelMapper;
     private final ValidaRegistroMovimiento actualizaMovimiento;
 
-    private final CuentaService cuentaService;
-    private final ReporteMovimientoService reporteMovimientoService;
-    private final ClienteRequestProducerService clienteRequestService;
-    private final ClienteResponseConsumer clienteResponse;
+//    private final CuentaService cuentaService;
+//    private final MovimientoService movimientoService;
+//    private final ClienteRequestProducerService clienteRequestService;
+//    private final ClienteResponseConsumer clienteResponse;
 
     @Override
     public MovimientoDTO crear(MovimientoDTO movimientoDTO) {
@@ -74,51 +75,57 @@ public class MovimientoServiceImpl implements MovimientoService {
         movimientoRepository.deleteById(id);
     }
 
+//    @Override
+//    public List<MovimientoClienteReporteDTO> obtenerMovimientosPorFechasYCliente(
+//            LocalDate fechaInicio, LocalDate fechaFin, String identificacion, String nombre) {
+//        try {
+//            // Enviar nombre al microservicio cliente-persona
+//            ClienteDTO clienteRequest = new ClienteDTO();
+//            clienteRequest.setIdentificacion(identificacion);
+//            clienteRequest.setNombre(nombre);
+//            clienteRequestService.obtenerClientePorIdentificacion(clienteRequest);
+//
+//            ClienteDTO clienteDTO = clienteResponse.obtenerClienteDTO().get(5, TimeUnit.SECONDS);
+//
+//            // Obtener las cuentas del cliente
+//            List<CuentaDTO> cuentas = cuentaService.findByIdentificacionCliente(clienteDTO.getIdentificacion());
+//
+//            List<MovimientoClienteReporteDTO> resultado = new ArrayList<>();
+//
+//            for (CuentaDTO cuenta : cuentas) {
+//                List<MovimientoDTO> movimientos = movimientoService.obtenerMovimientosEntreFechasPorCuenta(fechaInicio, fechaFin, cuenta.getNumeroCuenta());
+//
+//                for (MovimientoDTO movimiento : movimientos) {
+//                    MovimientoClienteReporteDTO dto = new MovimientoClienteReporteDTO();
+//                    dto.setFecha(movimiento.getFecha());
+//                    dto.setCliente(clienteDTO.getNombre());
+//                    dto.setTipoTransaccion(movimiento.getTransactionType().toString());
+//                    dto.setNumeroCuenta(cuenta.getNumeroCuenta());
+//                    dto.setTipo(cuenta.getAccountType().toString());
+//                    dto.setSaldoInicial(cuenta.getSaldoInicial());
+//                    dto.setEstado(cuenta.isEstado());
+//                    dto.setMovimiento(movimiento.getValor());
+//                    dto.setSaldoDisponible(movimiento.getSaldo());
+//
+//                    resultado.add(dto);
+//                }
+//            }
+//
+//            return resultado;
+//
+//        } catch (TimeoutException e) {
+//            log.error("⏰ Timeout esperando al microservicio cliente-persona", e);
+//            throw new RuntimeException("El microservicio cliente-persona no respondió a tiempo", e);
+//        } catch (Exception e) {
+//            log.error("❌ Error al obtener movimientos por cliente", e);
+//            throw new RuntimeException("Error al obtener movimientos del cliente", e);
+//        }
+//    }
+
     @Override
-    public List<MovimientoClienteReporteDTO> obtenerMovimientosPorFechasYCliente(
-            LocalDate fechaInicio, LocalDate fechaFin, String identificacion, String nombre) {
-        try {
-            // Enviar nombre al microservicio cliente-persona
-            ClienteDTO clienteRequest = new ClienteDTO();
-            clienteRequest.setIdentificacion(identificacion);
-            clienteRequest.setNombre(nombre);
-            clienteRequestService.obtenerClientePorIdentificacion(clienteRequest);
-
-            ClienteDTO clienteDTO = clienteResponse.obtenerClienteDTO().get(5, TimeUnit.SECONDS);
-
-            // Obtener las cuentas del cliente
-            List<CuentaDTO> cuentas = cuentaService.findByIdentificacionCliente(clienteDTO.getIdentificacion());
-
-            List<MovimientoClienteReporteDTO> resultado = new ArrayList<>();
-
-            for (CuentaDTO cuenta : cuentas) {
-                List<MovimientoDTO> movimientos = reporteMovimientoService.obtenerMovimientosEntreFechasPorCuenta(fechaInicio, fechaFin, cuenta.getNumeroCuenta());
-
-                for (MovimientoDTO movimiento : movimientos) {
-                    MovimientoClienteReporteDTO dto = new MovimientoClienteReporteDTO();
-                    dto.setFecha(movimiento.getFecha());
-                    dto.setCliente(clienteDTO.getNombre());
-                    dto.setTipoTransaccion(movimiento.getTransactionType().toString());
-                    dto.setNumeroCuenta(cuenta.getNumeroCuenta());
-                    dto.setTipo(cuenta.getAccountType().toString());
-                    dto.setSaldoInicial(cuenta.getSaldoInicial());
-                    dto.setEstado(cuenta.isEstado());
-                    dto.setMovimiento(movimiento.getValor());
-                    dto.setSaldoDisponible(movimiento.getSaldo());
-
-                    resultado.add(dto);
-                }
-            }
-
-            return resultado;
-
-        } catch (TimeoutException e) {
-            log.error("⏰ Timeout esperando al microservicio cliente-persona", e);
-            throw new RuntimeException("El microservicio cliente-persona no respondió a tiempo", e);
-        } catch (Exception e) {
-            log.error("❌ Error al obtener movimientos por cliente", e);
-            throw new RuntimeException("Error al obtener movimientos del cliente", e);
-        }
+    public List<MovimientoDTO> obtenerMovimientosEntreFechasPorCuenta(LocalDate fechaInicio, LocalDate fechaFin, String numeroCuenta) {
+        return movimientoRepository.obtenerMovimientosEntreFechasPorCuenta(fechaInicio, fechaFin, numeroCuenta).stream().map(
+                movimiento -> modelMapper.map(movimiento,MovimientoDTO.class)).toList();
     }
 
 }

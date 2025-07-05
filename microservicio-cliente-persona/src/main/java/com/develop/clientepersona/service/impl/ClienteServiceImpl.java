@@ -7,7 +7,7 @@ import com.develop.clientepersona.exception.CedulaInvalidaException;
 import com.develop.clientepersona.exception.RecursoNoEncontradoException;
 import com.develop.clientepersona.repository.ClienteRepository;
 import com.develop.clientepersona.service.ClienteService;
-import com.develop.clientepersona.service.ValidarIdentificacionCedula;
+import com.develop.clientepersona.util.ValidarIdentificacionCedula;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;

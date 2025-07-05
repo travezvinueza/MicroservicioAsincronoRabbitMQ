@@ -1,4 +1,4 @@
-package com.develop.cuentamovimientos.service;
+package com.develop.cuentamovimientos.util;
 
 import com.develop.cuentamovimientos.entity.Cuenta;
 import com.develop.cuentamovimientos.entity.MensajeError;

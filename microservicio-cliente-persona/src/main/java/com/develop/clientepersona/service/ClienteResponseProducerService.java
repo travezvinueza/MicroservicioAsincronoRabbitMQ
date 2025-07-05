@@ -20,10 +20,8 @@ public class ClienteResponseProducerService {
     private String routingKey;
 
     private final RabbitTemplate rabbitTemplate;
-    private final ModelMapper modelMapper;
 
-    public void responseCliente(Cliente cliente) {
-        ClienteDTO clienteDTO = modelMapper.map(cliente, ClienteDTO.class);
+    public void responseCliente(ClienteDTO clienteDTO) {
         try {
             rabbitTemplate.convertAndSend(exchange, routingKey, clienteDTO);
             log.info("Cliente enviado correctamente: {}", clienteDTO);

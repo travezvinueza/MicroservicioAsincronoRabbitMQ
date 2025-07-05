@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQResponseConfig {
 
+    @Value("${spring.rabbitmq.request.queue}")
+    private String requestQueue;
+
     @Value("${spring.rabbitmq.response.exchange}")
     private String responseExchange;
 
@@ -23,6 +26,11 @@ public class RabbitMQResponseConfig {
     @Bean
     public DirectExchange clienteResponseExchange() {
         return new DirectExchange(responseExchange);
+    }
+
+    @Bean
+    public Queue clienteRequestQueue() {
+        return new Queue(requestQueue); // 👈
     }
 
     @Bean

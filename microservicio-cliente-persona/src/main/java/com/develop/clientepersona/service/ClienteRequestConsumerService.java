@@ -8,6 +8,7 @@ import com.develop.clientepersona.repository.ClienteRepository;
 import com.rabbitmq.client.Channel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -19,41 +20,32 @@ import java.io.IOException;
 @Service
 @AllArgsConstructor
 public class ClienteRequestConsumerService {
-    private ClienteRepository clienteRepository;
-    private ClienteResponseProducerService clienteResponseService;
+    private final ClienteRepository clienteRepository;
+    private final ClienteResponseProducerService clienteResponseService;
+    private final ModelMapper modelMapper;
 
+    @RabbitListener(queues = "${spring.rabbitmq.request.queue}")
+    public void buscarCliente(ClienteDTO clienteDTO) {
+        if (clienteDTO.getIdentificacion() != null) {
+            log.info("Buscando por identificación: {}", clienteDTO.getIdentificacion());
+            Cliente clienteDb = clienteRepository.findByIdentificacion(clienteDTO.getIdentificacion())
+                    .orElseThrow(() -> new RecursoNoEncontradoException(MensajeError.RECURSO_NO_ENCONTRADO));
 
-    @RabbitListener(queues = "${spring.rabbitmq.request.queue}", ackMode = "MANUAL")
-    public void buscarCliente(ClienteDTO clienteDTO, Channel channel,
-                              @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
-        try {
-            if (clienteDTO.getIdentificacion() != null) {
-                log.info("Buscando por identificación: {}", clienteDTO.getIdentificacion());
-                Cliente clienteDb = clienteRepository.findByIdentificacion(clienteDTO.getIdentificacion())
-                        .orElseThrow(() -> new RecursoNoEncontradoException(MensajeError.RECURSO_NO_ENCONTRADO));
-                clienteResponseService.responseCliente(clienteDb);
+            ClienteDTO clienteDTOResponse = modelMapper.map(clienteDb, ClienteDTO.class);
+            clienteResponseService.responseCliente(clienteDTOResponse);
 
-            } else if (clienteDTO.getNombre() != null) {
-                String[] partes = clienteDTO.getNombre().trim().split(" ");
-                String nombre = partes[0];
+        } else if (clienteDTO.getNombre() != null) {
+            String[] partes = clienteDTO.getNombre().trim().split(" ");
+            String nombre = partes[0];
 
-                Cliente clienteDb = clienteRepository.findByNombre(nombre)
-                        .orElseThrow(() -> new RecursoNoEncontradoException(MensajeError.RECURSO_NO_ENCONTRADO));
-                clienteResponseService.responseCliente(clienteDb);
+            Cliente clienteDb = clienteRepository.findByNombre(nombre)
+                    .orElseThrow(() -> new RecursoNoEncontradoException(MensajeError.RECURSO_NO_ENCONTRADO));
 
-            } else {
-                log.warn("Petición vacía recibida");
-            }
+            ClienteDTO clienteDTOResponse = modelMapper.map(clienteDb, ClienteDTO.class);
+            clienteResponseService.responseCliente(clienteDTOResponse);
 
-            channel.basicAck(tag, false);
-
-        } catch (Exception e) {
-            log.error("❌ Error en el consumidor: {}", e.getMessage(), e);
-            try {
-                channel.basicNack(tag, false, false); // ❌ No requeue
-            } catch (IOException ioException) {
-                log.error("❌ Error al enviar NACK: {}", ioException.getMessage(), ioException);
-            }
+        } else {
+            log.warn("Petición vacía recibida");
         }
     }
 }

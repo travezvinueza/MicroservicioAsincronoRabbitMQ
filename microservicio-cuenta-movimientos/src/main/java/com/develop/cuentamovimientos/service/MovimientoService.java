@@ -13,5 +13,6 @@ public interface MovimientoService {
     MovimientoDTO actualizar(MovimientoDTO movimientoDTO);
     void eliminarPorId(Long id);
 
-    List<MovimientoClienteReporteDTO> obtenerMovimientosPorFechasYCliente(LocalDate fechaInicio, LocalDate fechaFin, String identificacion, String nombre);
+//    List<MovimientoClienteReporteDTO> obtenerMovimientosPorFechasYCliente(LocalDate fechaInicio, LocalDate fechaFin, String identificacion, String nombre);
+    List<MovimientoDTO> obtenerMovimientosEntreFechasPorCuenta(LocalDate fechaInicio, LocalDate fechaFin, String numeroCuenta);
 }

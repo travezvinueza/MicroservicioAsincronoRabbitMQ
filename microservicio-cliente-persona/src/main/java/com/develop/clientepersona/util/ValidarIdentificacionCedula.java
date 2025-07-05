@@ -1,4 +1,4 @@
-package com.develop.clientepersona.service;
+package com.develop.clientepersona.util;
 
 import org.springframework.stereotype.Service;
 
