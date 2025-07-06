@@ -14,18 +14,18 @@ Proyecto realizado bajo mvc con arquitetcura de microservicios para clientes y s
 
 # Configuración
 
-El proyecto tiene swagger para la documentacion y test de endpoints y pruebas de integracion.
+El proyecto tiene swagger para la documentacion de endpoints.
 
 - El primer servicio se deplega en el puerto 8080 
 
 ```
-  http://localhost:8080/api/swagger-ui/index.html#/
+  http://localhost:8080/swagger-ui/index.html#/
 ```
 
 - El segundo servicio se deplega en el puerto 8081
 
 ```
-  http://localhost:8081/api/swagger-ui/index.html#/
+  http://localhost:8081/swagger-ui/index.html#/
 ```
 
 ## Imagenes

@@ -13,6 +13,8 @@ import com.develop.cuentamovimientos.service.CuentaService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,13 +33,13 @@ public class CuentaServiceImpl implements CuentaService {
 
     @Override
     public CuentaDTO crear(CuentaDTO cuentaDTO) {
-        if (cuentaRepository.findByNumeroCuenta(cuentaDTO.getNumeroCuenta()).isPresent()) {
+        if (cuentaRepository.findByAccountNumber(cuentaDTO.getAccountNumber()).isPresent()) {
             throw new CuentaNoEncontradaException("❌ El número de cuenta ya existe");
         }
         // Llamar al microservicio cliente-persona por RabbitMQ
         ClienteDTO clienteRequest = new ClienteDTO();
-        clienteRequest.setIdentificacion(cuentaDTO.getIdentificacionCliente());
-        clienteRequest.setNombre(cuentaDTO.getNombre());
+        clienteRequest.setIdentification(cuentaDTO.getIdentificationClient());
+        clienteRequest.setFullName(cuentaDTO.getFullName());
 
         clienteRequestProducerService.obtenerClientePorIdentificacion(clienteRequest);
 
@@ -51,7 +53,7 @@ public class CuentaServiceImpl implements CuentaService {
             throw new RuntimeException("❌ Error al consultar cliente: " + e.getMessage(), e);
         }
 
-        if (clienteResponse == null || clienteResponse.getIdentificacion() == null) {
+        if (clienteResponse == null || clienteResponse.getIdentification() == null) {
             throw new RecursoNoEncontradoException("❌ Cliente no encontrado. No se puede crear la cuenta");
         }
 
@@ -62,9 +64,9 @@ public class CuentaServiceImpl implements CuentaService {
     }
 
     @Override
-    public List<CuentaDTO> listar() {
-        return cuentaRepository.findAll().stream().map(
-                cuenta-> modelMapper.map(cuenta,CuentaDTO.class)).toList();
+    public Page<CuentaDTO> listar(Pageable pageable) {
+        Page<Cuenta> cuentaPage = cuentaRepository.findAll(pageable);
+        return cuentaPage.map(cuenta -> modelMapper.map(cuenta, CuentaDTO.class));
     }
 
     @Override
@@ -77,10 +79,10 @@ public class CuentaServiceImpl implements CuentaService {
     public CuentaDTO actualizar(CuentaDTO cuentaDTO) {
         CuentaDTO cuentaDTODB= obtenerPorId(cuentaDTO.getId());
 
-        cuentaDTODB.setNumeroCuenta(cuentaDTO.getNumeroCuenta());
+        cuentaDTODB.setAccountNumber(cuentaDTO.getAccountNumber());
         cuentaDTODB.setAccountType(cuentaDTO.getAccountType());
-        cuentaDTODB.setSaldoInicial(cuentaDTO.getSaldoInicial());
-        cuentaDTODB.setEstado(cuentaDTO.isEstado());
+        cuentaDTODB.setInitialBalance(cuentaDTO.getInitialBalance());
+        cuentaDTODB.setState(cuentaDTO.isState());
 
         Cuenta cuenta = modelMapper.map(cuentaDTODB, Cuenta.class);
 
@@ -94,8 +96,8 @@ public class CuentaServiceImpl implements CuentaService {
     }
 
     @Override
-    public List<CuentaDTO> findByIdentificacionCliente(String identificacionCliente) {
-        return cuentaRepository.findByIdentificacionCliente(identificacionCliente).stream().map(
+    public List<CuentaDTO> findByIdentificacionCliente(String identificationClient) {
+        return cuentaRepository.findByIdentificationClient(identificationClient).stream().map(
                 cuenta-> modelMapper.map(cuenta,CuentaDTO.class)).toList();
     }
 }

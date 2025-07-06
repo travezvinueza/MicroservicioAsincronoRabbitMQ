@@ -26,9 +26,9 @@ public class ClienteRequestConsumerService {
     @RabbitListener(queues = "${spring.rabbitmq.request.queue}", containerFactory = "rabbitListenerContainerFactory")
     public void buscarCliente(ClienteDTO clienteDTO, Message message, Channel channel) throws IOException {
         try {
-            if (clienteDTO.getIdentificacion() != null) {
-                log.info("Buscando por identificación: {}", clienteDTO.getIdentificacion());
-                Cliente clienteDb = clienteRepository.findByIdentificacion(clienteDTO.getIdentificacion())
+            if (clienteDTO.getIdentification() != null) {
+                log.info("Buscando por identificación: {}", clienteDTO.getIdentification());
+                Cliente clienteDb = clienteRepository.findByIdentification(clienteDTO.getIdentification())
                         .orElse(null);
                 if (clienteDb == null) {
                     clienteResponseService.responseCliente(new ClienteDTO());
@@ -39,10 +39,10 @@ public class ClienteRequestConsumerService {
 
                 ClienteDTO clienteDTOResponse = modelMapper.map(clienteDb, ClienteDTO.class);
                 clienteResponseService.responseCliente(clienteDTOResponse);
-            } else if (clienteDTO.getNombre() != null) {
-                String[] partes = clienteDTO.getNombre().trim().split(" ");
+            } else if (clienteDTO.getFullName() != null) {
+                String[] partes = clienteDTO.getFullName().trim().split(" ");
                 String nombre = partes[0];
-                Cliente clienteDb = clienteRepository.findByNombre(nombre)
+                Cliente clienteDb = clienteRepository.findByFullName(nombre)
                         .orElseThrow(() -> new RecursoNoEncontradoException(MensajeError.RECURSO_NO_ENCONTRADO));
                 ClienteDTO clienteDTOResponse = modelMapper.map(clienteDb, ClienteDTO.class);
                 clienteResponseService.responseCliente(clienteDTOResponse);
@@ -54,7 +54,6 @@ public class ClienteRequestConsumerService {
 
         } catch (Exception e) {
             log.error("Error procesando el mensaje", e);
-            // 👇 NACK manual si hay error, sin requeue
             channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, false);
         }
     }

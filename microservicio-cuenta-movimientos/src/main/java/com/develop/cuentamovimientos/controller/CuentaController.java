@@ -4,11 +4,12 @@ import com.develop.cuentamovimientos.dto.CuentaDTO;
 import com.develop.cuentamovimientos.service.CuentaService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/cuentas")
@@ -23,8 +24,13 @@ public class CuentaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CuentaDTO>> listar(){
-        return new ResponseEntity<>(cuentaService.listar(), HttpStatus.OK);
+    public ResponseEntity<Page<CuentaDTO>> listar(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size
+    ){
+        Pageable pageable = PageRequest.of(0, 5);
+        Page<CuentaDTO> cuentaDTOPage = cuentaService.listar(pageable);
+        return ResponseEntity.ok(cuentaDTOPage);
     }
 
     @GetMapping("/{id}")

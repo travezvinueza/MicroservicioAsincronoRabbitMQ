@@ -26,12 +26,12 @@ public class EstadoCuentaServiceImpl implements EstadoCuentaService {
     private final MovimientoService movimientoService;
 
     @Override
-    public EstadoCuentaDTO obtenerEstadoCuenta(LocalDate fechaInicio, LocalDate fechaFin, String identificacionCliente, String nombre)
+    public EstadoCuentaDTO obtenerEstadoCuenta(LocalDate fechaInicio, LocalDate fechaFin, String identificationClient, String fullName)
             throws ExecutionException, InterruptedException {
         // Enviar la identificación a RabbitMQ
         ClienteDTO clienteDTORequest = new ClienteDTO();
-        clienteDTORequest.setIdentificacion(identificacionCliente);
-        clienteDTORequest.setNombre(nombre);
+        clienteDTORequest.setIdentification(identificationClient);
+        clienteDTORequest.setFullName(fullName);
         clienteRequestService.obtenerClientePorIdentificacion(clienteDTORequest);
 
         // Obtener el cliente desde RabbitMQ
@@ -40,7 +40,7 @@ public class EstadoCuentaServiceImpl implements EstadoCuentaService {
         log.info("Final DTO: {}", clienteDTO);
 
         // Obtener las cuentas
-        List<CuentaDTO> cuentasDTO = cuentaService.findByIdentificacionCliente(clienteDTO.getIdentificacion());
+        List<CuentaDTO> cuentasDTO = cuentaService.findByIdentificacionCliente(clienteDTO.getIdentification());
 
         // Obtener los movimientos por cuenta
         List<ReporteCuentaMovimientoDTO> reporteCuentaMovimientos = new ArrayList<>();
@@ -48,7 +48,7 @@ public class EstadoCuentaServiceImpl implements EstadoCuentaService {
             ReporteCuentaMovimientoDTO reporteCuentaMovimiento = new ReporteCuentaMovimientoDTO();
             reporteCuentaMovimiento.setCuentaDTO(cuentaDTO);
             reporteCuentaMovimiento.setMovimientoDTO(
-                    movimientoService.obtenerMovimientosEntreFechasPorCuenta(fechaInicio, fechaFin, cuentaDTO.getNumeroCuenta())
+                    movimientoService.obtenerMovimientosEntreFechasPorCuenta(fechaInicio, fechaFin, cuentaDTO.getAccountNumber())
             );
             reporteCuentaMovimientos.add(reporteCuentaMovimiento);
         }

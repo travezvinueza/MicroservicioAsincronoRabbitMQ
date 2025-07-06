@@ -16,11 +16,14 @@ public class Movimiento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate fecha;
+    private LocalDate date;
     @Enumerated(EnumType.STRING)
     @Column(name = "transaction_type")
     private TransactionType transactionType;
-    private double valor;
-    private double saldo;
-    private String numeroCuenta;
+    @Column(name = "value")
+    private double value;
+    @Column(name = "balance")
+    private double balance;
+    @Column(name = "account_number")
+    private String accountNumber;
 }

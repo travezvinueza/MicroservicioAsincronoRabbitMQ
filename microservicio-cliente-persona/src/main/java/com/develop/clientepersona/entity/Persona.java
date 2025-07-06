@@ -22,13 +22,17 @@ public class Persona {
     @CreationTimestamp
     @Column(name = "creation_date")
     private Timestamp creationDate;
-    private String nombre;
+    @Column(name = "full_name")
+    private String fullName;
     @Enumerated(EnumType.STRING)
     @Column(name = "gender_person")
     private GenderPerson genderPerson;
-    private int edad;
-    @Column(unique = true)
-    private String identificacion;
-    private String direccion;
-    private String telefono;
+    @Column(name = "age")
+    private int age;
+    @Column(name = "identification", unique = true)
+    private String identification;
+    @Column(name = "address")
+    private String address;
+    @Column(name = "phone")
+    private String phone;
 }

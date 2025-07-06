@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CuentaRepository extends JpaRepository<Cuenta, Long> {
-    Optional<Cuenta> findByNumeroCuenta(String numeroCuenta);
-    List<Cuenta> findByIdentificacionCliente(String identificacionCliente);
+    Optional<Cuenta> findByAccountNumber(String accountNumber);
+    List<Cuenta> findByIdentificationClient(String identificationClient);
 }

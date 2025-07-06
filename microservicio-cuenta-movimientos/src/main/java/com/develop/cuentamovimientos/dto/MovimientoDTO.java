@@ -13,12 +13,12 @@ import java.time.LocalDate;
 public class MovimientoDTO {
     private Long id;
     @NotBlank(message = "El campo fecha no debe estar en blanco")
-    private LocalDate fecha;
+    private LocalDate date;
     @NotNull(message = "El tipo de transaccion es obligatorio")
     private TransactionType transactionType;
     @NotBlank(message = "El campo valor no debe estar en blanco")
-    private double valor;
-    private double saldo;
+    private double value;
+    private double balance;
     @NotBlank(message = "El campo numero de cuenta no debe estar en blanco")
-    private String numeroCuenta;
+    private String accountNumber;
 }

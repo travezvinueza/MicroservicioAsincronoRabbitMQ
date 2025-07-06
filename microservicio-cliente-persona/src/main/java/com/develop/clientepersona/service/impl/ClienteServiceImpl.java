@@ -11,10 +11,11 @@ import com.develop.clientepersona.util.ValidarIdentificacionCedula;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Slf4j
 @Service
@@ -27,28 +28,25 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public ClienteDTO crear(ClienteDTO clienteDTO) {
-
-        if(!validarIdentificacionCedula.validarCedula(clienteDTO.getIdentificacion())){
+        if(!validarIdentificacionCedula.validarCedula(clienteDTO.getIdentification())){
             throw new CedulaInvalidaException(MensajeError.IDENTIFICACION_NO_VALIDO);
         }
 
         Cliente cliente = modelMapper.map(clienteDTO,Cliente.class);
         cliente.setPassword(bCryptPasswordEncoder.encode(clienteDTO.getPassword()));
-
         return modelMapper.map(clienteRepository.save(cliente),ClienteDTO.class);
     }
 
     @Override
-    public List<ClienteDTO> listar() {
-        return clienteRepository.findAll().stream().map(
-                cliente-> modelMapper.map(cliente,ClienteDTO.class)).toList();
+    public Page<ClienteDTO> listar(Pageable pageable) {
+        Page<Cliente> clientePage = clienteRepository.findAll(pageable);
+        return clientePage.map(cliente -> modelMapper.map(cliente, ClienteDTO.class));
     }
 
     @Override
     public ClienteDTO obtenerPorId(Long id) {
         Cliente cliente=clienteRepository.findById(id).orElseThrow(
-                ()-> new RecursoNoEncontradoException(MensajeError.RECURSO_NO_ENCONTRADO)
-        );
+                ()-> new RecursoNoEncontradoException(MensajeError.RECURSO_NO_ENCONTRADO));
         return modelMapper.map(cliente,ClienteDTO.class);
     }
 
@@ -57,20 +55,19 @@ public class ClienteServiceImpl implements ClienteService {
 
         Cliente clienteDB= modelMapper.map(obtenerPorId(clienteDTO.getId()),Cliente.class);
 
-        clienteDB.setNombre(clienteDTO.getNombre());
+        clienteDB.setFullName(clienteDTO.getFullName());
         clienteDB.setGenderPerson(clienteDTO.getGenderPerson());
-        clienteDB.setEdad(clienteDTO.getEdad());
-        clienteDB.setDireccion(clienteDTO.getDireccion());
-        clienteDB.setTelefono(clienteDTO.getTelefono());
-        clienteDB.setEstado(clienteDTO.isEstado());
+        clienteDB.setAge(clienteDTO.getAge());
+        clienteDB.setAddress(clienteDTO.getAddress());
+        clienteDB.setPhone(clienteDTO.getPhone());
+        clienteDB.setState(clienteDTO.isState());
         return modelMapper.map(clienteRepository.save(clienteDB), ClienteDTO.class);
     }
 
     @Override
     public void eliminarPorId(Long id) {
         clienteRepository.findById(id).orElseThrow(
-                ()-> new RecursoNoEncontradoException(MensajeError.RECURSO_NO_ENCONTRADO)
-        );
+                ()-> new RecursoNoEncontradoException(MensajeError.RECURSO_NO_ENCONTRADO));
         clienteRepository.deleteById(id);
     }
 }

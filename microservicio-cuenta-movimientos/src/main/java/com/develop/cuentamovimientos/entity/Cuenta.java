@@ -14,13 +14,17 @@ public class Cuenta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
-    private String numeroCuenta;
+    @Column(name = "number_account", unique = true)
+    private String accountNumber;
     @Enumerated(EnumType.STRING)
     @Column(name = "account_type")
     private AccountType accountType;
-    private double saldoInicial;
-    private boolean estado;
-    private String identificacionCliente;
-    private String nombre;
+    @Column(name = "initial_balance")
+    private double initialBalance;
+    @Column(name = "state")
+    private boolean state;
+    @Column(name = "identification_client", unique = true)
+    private String identificationClient;
+    @Column(name = "full_name")
+    private String fullName;
 }

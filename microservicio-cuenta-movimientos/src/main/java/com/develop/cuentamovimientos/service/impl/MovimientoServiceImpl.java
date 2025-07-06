@@ -10,6 +10,8 @@ import com.develop.cuentamovimientos.util.ValidaRegistroMovimiento;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,9 +34,9 @@ public class MovimientoServiceImpl implements MovimientoService {
     }
 
     @Override
-    public List<MovimientoDTO> listar() {
-        return movimientoRepository.findAll().stream().map(
-                movimiento -> modelMapper.map(movimiento,MovimientoDTO.class)).toList();
+    public Page<MovimientoDTO> listar(Pageable pageable) {
+        Page<Movimiento> movimientos = movimientoRepository.findAll(pageable);
+        return movimientos.map(movimiento -> modelMapper.map(movimiento, MovimientoDTO.class));
     }
 
     @Override
@@ -49,10 +51,10 @@ public class MovimientoServiceImpl implements MovimientoService {
     public MovimientoDTO actualizar(MovimientoDTO movimientoDTO) {
         Movimiento movimientoDB = modelMapper.map(obtenerPorId(movimientoDTO.getId()), Movimiento.class);
 
-        movimientoDB.setFecha(movimientoDTO.getFecha());
+        movimientoDB.setDate(movimientoDTO.getDate());
         movimientoDB.setTransactionType(movimientoDTO.getTransactionType());
-        movimientoDB.setValor(movimientoDTO.getValor());
-        movimientoDB.setSaldo(movimientoDTO.getSaldo());
+        movimientoDB.setValue(movimientoDTO.getValue());
+        movimientoDB.setBalance(movimientoDTO.getBalance());
 
         return modelMapper.map(movimientoRepository.save(movimientoDB),MovimientoDTO.class);
     }
@@ -66,8 +68,8 @@ public class MovimientoServiceImpl implements MovimientoService {
     }
 
     @Override
-    public List<MovimientoDTO> obtenerMovimientosEntreFechasPorCuenta(LocalDate fechaInicio, LocalDate fechaFin, String numeroCuenta) {
-        return movimientoRepository.obtenerMovimientosEntreFechasPorCuenta(fechaInicio, fechaFin, numeroCuenta).stream().map(
+    public List<MovimientoDTO> obtenerMovimientosEntreFechasPorCuenta(LocalDate fechaInicio, LocalDate fechaFin, String accountNumber) {
+        return movimientoRepository.obtenerMovimientosEntreFechasPorAccountNumber(fechaInicio, fechaFin, accountNumber).stream().map(
                 movimiento -> modelMapper.map(movimiento,MovimientoDTO.class)).toList();
     }
 

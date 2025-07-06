@@ -21,9 +21,9 @@ public class ClienteRequestProducerService {
 
     public void obtenerClientePorIdentificacion(ClienteDTO clienteDTO) {
         try {
-            log.info("Mensage enviado: {}", clienteDTO.getIdentificacion());
+            log.info("Mensage enviado: {}", clienteDTO.getIdentification());
             rabbitTemplate.convertAndSend(exchange, routingKey, clienteDTO);
-            log.info("Mensage enviado: {}", clienteDTO.getNombre());
+            log.info("Mensage enviado: {}", clienteDTO.getFullName());
         } catch (Exception e) {
             log.error("Error al enviar mensaje: {}", e.getMessage(), e);
         }

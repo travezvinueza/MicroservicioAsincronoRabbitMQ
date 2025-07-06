@@ -1,5 +1,6 @@
 package com.develop.clientepersona.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.*;
@@ -11,6 +12,8 @@ import lombok.*;
 @AllArgsConstructor
 @DiscriminatorValue("client")
 public class Cliente extends Persona {
+    @Column(name = "password")
     private String password;
-    private boolean estado;
+    @Column(name = "state")
+    private boolean state;
 }

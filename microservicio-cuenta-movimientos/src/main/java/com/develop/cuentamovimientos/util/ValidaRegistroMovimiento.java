@@ -26,31 +26,31 @@ public class ValidaRegistroMovimiento {
         }
 
         // Buscar cuenta
-        Cuenta cuenta = cuentaRepository.findByNumeroCuenta(movimiento.getNumeroCuenta())
+        Cuenta cuenta = cuentaRepository.findByAccountNumber(movimiento.getAccountNumber())
                 .orElseThrow(() -> new CuentaNoEncontradaException(MensajeError.CUENTA_NO_ENCONTRADA));
 
         // Obtener último movimiento si existe
-        double saldoActual = movimientoRepository.obtenerUltimoMovimientoPorNumeroCuenta(movimiento.getNumeroCuenta())
-                .map(Movimiento::getSaldo)
-                .orElse(cuenta.getSaldoInicial());
+        double saldoActual = movimientoRepository.obtenerUltimoMovimientoPorAccountNumber(movimiento.getAccountNumber())
+                .map(Movimiento::getBalance)
+                .orElse(cuenta.getInitialBalance());
 
         // Lógica de depósito
         if (movimiento.getTransactionType() == TransactionType.DEPOSITO) {
-            if (movimiento.getValor() <= 0) {
+            if (movimiento.getValue() <= 0) {
                 throw new MovimientoDepositoNegativoException(MensajeError.VALOR_DEPOSITO_NO_VALIDO);
             }
-            movimiento.setSaldo(saldoActual + movimiento.getValor());
+            movimiento.setBalance(saldoActual + movimiento.getValue());
         }
 
         // Lógica de retiro
         else if (movimiento.getTransactionType() == TransactionType.RETIRO) {
-            if (movimiento.getValor() <= 0) {
+            if (movimiento.getValue() <= 0) {
                 throw new MovimientoRetiroPositivoException(MensajeError.VALOR_RETIRO_NO_VALIDO);
             }
-            if (saldoActual < movimiento.getValor()) {
+            if (saldoActual < movimiento.getValue()) {
                 throw new SaldoInsuficienteException(MensajeError.SALDO_INSUFICIENTE);
             }
-            movimiento.setSaldo(saldoActual - movimiento.getValor());
+            movimiento.setBalance(saldoActual - movimiento.getValue());
         }
 
         return movimiento;

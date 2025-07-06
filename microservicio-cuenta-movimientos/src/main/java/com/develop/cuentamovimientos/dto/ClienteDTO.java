@@ -14,12 +14,12 @@ import java.sql.Timestamp;
 public class ClienteDTO implements Serializable {
     private Long id;
     private Timestamp creationDate;
-    private String nombre;
+    private String fullName;
     private GenderPerson genderPerson;
-    private int edad;
-    private String identificacion;
-    private String direccion;
-    private String telefono;
+    private int age;
+    private String identification;
+    private String address;
+    private String phone;
     private String password;
-    private boolean estado;
+    private boolean state;
 }
