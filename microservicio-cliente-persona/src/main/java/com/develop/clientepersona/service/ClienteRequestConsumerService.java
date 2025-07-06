@@ -2,8 +2,6 @@ package com.develop.clientepersona.service;
 
 import com.develop.clientepersona.dto.ClienteDTO;
 import com.develop.clientepersona.entity.Cliente;
-import com.develop.clientepersona.entity.MensajeError;
-import com.develop.clientepersona.exception.RecursoNoEncontradoException;
 import com.develop.clientepersona.repository.ClienteRepository;
 import com.rabbitmq.client.Channel;
 import lombok.AllArgsConstructor;
@@ -23,37 +21,32 @@ public class ClienteRequestConsumerService {
     private final ClienteResponseProducerService clienteResponseService;
     private final ModelMapper modelMapper;
 
-    @RabbitListener(queues = "${spring.rabbitmq.request.queue}", containerFactory = "rabbitListenerContainerFactory")
-    public void buscarCliente(ClienteDTO clienteDTO, Message message, Channel channel) throws IOException {
+    @RabbitListener(queues = "${spring.rabbitmq.request.queue}")
+    public void buscarCliente(String input, Message message, Channel channel) throws IOException {
         try {
-            if (clienteDTO.getIdentification() != null) {
-                log.info("Buscando por identificación: {}", clienteDTO.getIdentification());
-                Cliente clienteDb = clienteRepository.findByIdentification(clienteDTO.getIdentification())
-                        .orElse(null);
-                if (clienteDb == null) {
-                    clienteResponseService.responseCliente(new ClienteDTO());
-                } else {
-                    ClienteDTO clienteDTOResponse = modelMapper.map(clienteDb, ClienteDTO.class);
-                    clienteResponseService.responseCliente(clienteDTOResponse);
-                }
+            log.info("Mensaje recibido: {}", input);
 
-                ClienteDTO clienteDTOResponse = modelMapper.map(clienteDb, ClienteDTO.class);
-                clienteResponseService.responseCliente(clienteDTOResponse);
-            } else if (clienteDTO.getFullName() != null) {
-                String[] partes = clienteDTO.getFullName().trim().split(" ");
-                String nombre = partes[0];
-                Cliente clienteDb = clienteRepository.findByFullName(nombre)
-                        .orElseThrow(() -> new RecursoNoEncontradoException(MensajeError.RECURSO_NO_ENCONTRADO));
-                ClienteDTO clienteDTOResponse = modelMapper.map(clienteDb, ClienteDTO.class);
-                clienteResponseService.responseCliente(clienteDTOResponse);
+            Cliente clienteDb;
+            if (input.matches("\\d+")) {
+                log.info("Buscando por identificación...");
+                clienteDb = clienteRepository.findByIdentification(input)
+                        .orElse(null);
             } else {
-                log.warn("Petición vacía recibida");
+                log.info("Buscando por nombre completo...");
+                String fullName = input.trim();
+                clienteDb = clienteRepository.findByFullName(fullName)
+                        .orElse(null);
             }
 
-            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+            ClienteDTO clienteDTOResponse = (clienteDb != null)
+                    ? modelMapper.map(clienteDb, ClienteDTO.class)
+                    : new ClienteDTO();
 
+            clienteResponseService.responseCliente(clienteDTOResponse);
+
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
         } catch (Exception e) {
-            log.error("Error procesando el mensaje", e);
+            log.error("Error procesando mensaje", e);
             channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, false);
         }
     }

@@ -25,6 +25,4 @@ public class Cuenta {
     private boolean state;
     @Column(name = "identification_client", unique = true)
     private String identificationClient;
-    @Column(name = "full_name")
-    private String fullName;
 }

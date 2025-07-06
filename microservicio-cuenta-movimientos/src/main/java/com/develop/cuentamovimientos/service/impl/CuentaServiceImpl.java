@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 @Slf4j
 @Service
@@ -36,26 +35,22 @@ public class CuentaServiceImpl implements CuentaService {
         if (cuentaRepository.findByAccountNumber(cuentaDTO.getAccountNumber()).isPresent()) {
             throw new CuentaNoEncontradaException("❌ El número de cuenta ya existe");
         }
-        // Llamar al microservicio cliente-persona por RabbitMQ
-        ClienteDTO clienteRequest = new ClienteDTO();
-        clienteRequest.setIdentification(cuentaDTO.getIdentificationClient());
-        clienteRequest.setFullName(cuentaDTO.getFullName());
 
-        clienteRequestProducerService.obtenerClientePorIdentificacion(clienteRequest);
+        String identification = cuentaDTO.getIdentificationClient();
+        clienteRequestProducerService.obtenerClientePorIdentificacion(identification);
 
-        ClienteDTO clienteResponse;
+        ClienteDTO clienteDTO;
         try {
-            clienteResponse = clienteResponseConsumer.obtenerClienteDTO()
-                    .get(5, TimeUnit.SECONDS);
-        } catch (TimeoutException e) {
-            throw new RuntimeException("❌ El microservicio cliente-persona no respondió a tiempo");
+            clienteDTO = clienteResponseConsumer.obtenerClienteDTO().get(5, TimeUnit.SECONDS);
         } catch (Exception e) {
-            throw new RuntimeException("❌ Error al consultar cliente: " + e.getMessage(), e);
+            throw new RuntimeException("❌ Error al obtener el cliente: " + e.getMessage(), e);
         }
 
-        if (clienteResponse == null || clienteResponse.getIdentification() == null) {
+        if (clienteDTO == null || clienteDTO.getIdentification() == null) {
             throw new RecursoNoEncontradoException("❌ Cliente no encontrado. No se puede crear la cuenta");
         }
+
+        cuentaDTO.setIdentificationClient(clienteDTO.getIdentification());
 
         Cuenta cuenta = modelMapper.map(cuentaDTO, Cuenta.class);
         Cuenta saved = cuentaRepository.save(cuenta);
@@ -83,6 +78,7 @@ public class CuentaServiceImpl implements CuentaService {
         cuentaDTODB.setAccountType(cuentaDTO.getAccountType());
         cuentaDTODB.setInitialBalance(cuentaDTO.getInitialBalance());
         cuentaDTODB.setState(cuentaDTO.isState());
+        cuentaDTODB.setIdentificationClient(cuentaDTO.getIdentificationClient());
 
         Cuenta cuenta = modelMapper.map(cuentaDTODB, Cuenta.class);
 

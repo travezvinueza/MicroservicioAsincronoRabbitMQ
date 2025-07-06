@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import org.modelmapper.ModelMapper;
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -37,14 +36,13 @@ public class CuentaMovimientoConfiguration implements WebMvcConfigurer {
         return rabbitTemplate;
     }
 
-    @Bean
-    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory) {
-        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
-        factory.setMessageConverter(converter()); // ← clave aquí
-//        factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
-        return factory;
-    }
+//    @Bean
+//    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory) {
+//        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+//        factory.setConnectionFactory(connectionFactory);
+//        factory.setMessageConverter(converter());
+//        return factory;
+//    }
 
     @Bean
     public ModelMapper modelMapper(){

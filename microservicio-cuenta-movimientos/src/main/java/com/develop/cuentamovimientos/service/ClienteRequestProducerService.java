@@ -1,6 +1,5 @@
 package com.develop.cuentamovimientos.service;
 
-import com.develop.cuentamovimientos.dto.ClienteDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -19,13 +18,18 @@ public class ClienteRequestProducerService {
 
     private final RabbitTemplate rabbitTemplate;
 
-    public void obtenerClientePorIdentificacion(ClienteDTO clienteDTO) {
+    public void obtenerClientePorIdentificacion(String identification) {
         try {
-            log.info("Mensage enviado: {}", clienteDTO.getIdentification());
-            rabbitTemplate.convertAndSend(exchange, routingKey, clienteDTO);
-            log.info("Mensage enviado: {}", clienteDTO.getFullName());
+            log.info("Mensage enviado: {}", identification);
+            rabbitTemplate.convertAndSend(exchange, routingKey, identification);
+            log.info("Mensage enviado: {}", identification);
         } catch (Exception e) {
             log.error("Error al enviar mensaje: {}", e.getMessage(), e);
         }
     }
+
+    public void obtenerClientePorNombreCompleto(String fullName) {
+        rabbitTemplate.convertAndSend(exchange, routingKey, fullName);
+    }
+
 }

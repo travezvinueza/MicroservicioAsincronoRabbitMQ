@@ -4,6 +4,7 @@ import com.develop.cuentamovimientos.dto.ClienteDTO;
 import com.develop.cuentamovimientos.dto.CuentaDTO;
 import com.develop.cuentamovimientos.dto.EstadoCuentaDTO;
 import com.develop.cuentamovimientos.dto.ReporteCuentaMovimientoDTO;
+import com.develop.cuentamovimientos.exception.RecursoNoEncontradoException;
 import com.develop.cuentamovimientos.service.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,18 +27,19 @@ public class EstadoCuentaServiceImpl implements EstadoCuentaService {
     private final MovimientoService movimientoService;
 
     @Override
-    public EstadoCuentaDTO obtenerEstadoCuenta(LocalDate fechaInicio, LocalDate fechaFin, String identificationClient, String fullName)
+    public EstadoCuentaDTO obtenerEstadoCuenta(LocalDate fechaInicio, LocalDate fechaFin, String fullName)
             throws ExecutionException, InterruptedException {
-        // Enviar la identificación a RabbitMQ
-        ClienteDTO clienteDTORequest = new ClienteDTO();
-        clienteDTORequest.setIdentification(identificationClient);
-        clienteDTORequest.setFullName(fullName);
-        clienteRequestService.obtenerClientePorIdentificacion(clienteDTORequest);
+
+        clienteRequestService.obtenerClientePorNombreCompleto(fullName);
 
         // Obtener el cliente desde RabbitMQ
         CompletableFuture<ClienteDTO> clienteDTOCompletableFuture = clienteResponse.obtenerClienteDTO();
         ClienteDTO clienteDTO = clienteDTOCompletableFuture.get();
         log.info("Final DTO: {}", clienteDTO);
+
+        if (clienteDTO == null || clienteDTO.getIdentification() == null) {
+            throw new RecursoNoEncontradoException("❌ Cliente no encontrado con el nombre proporcionado");
+        }
 
         // Obtener las cuentas
         List<CuentaDTO> cuentasDTO = cuentaService.findByIdentificacionCliente(clienteDTO.getIdentification());
