@@ -26,13 +26,13 @@ public class RabbitMQResponseConfig {
     }
 
     @Bean
-    public Queue clienteResponseQueue() {
-        return QueueBuilder.durable(responseQueue).build();
+    public DirectExchange clienteResponseExchange() {
+        return ExchangeBuilder.directExchange(responseExchange).durable(true).build();
     }
 
     @Bean
-    public DirectExchange clienteResponseExchange() {
-        return ExchangeBuilder.directExchange(responseExchange).durable(true).build();
+    public Queue clienteResponseQueue() {
+        return QueueBuilder.durable(responseQueue).build();
     }
 
     @Bean

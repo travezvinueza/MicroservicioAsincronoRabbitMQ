@@ -1,8 +1,8 @@
 package com.develop.clientepersona.util;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class ValidarIdentificacionCedula {
     public boolean validarCedula(String cedula){
         int total = 0;
