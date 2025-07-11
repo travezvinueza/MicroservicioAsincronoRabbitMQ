@@ -1,15 +1,16 @@
 version: '3.8'
 services:
-  mysql1:
-    image: mysql:8.0
-    container_name: mysql1
+  postgres_db:
+    image: postgres:14
+    container_name: postgres_db
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: cliente_persona
+      POSTGRES_DB: client_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
-      - "3307:3306"
+      - "5432:5432"
     volumes:
-      - mysql1-data:/var/lib/mysql
+      - pgdata1:/var/lib/postgresql/data
 
   mysql2:
     image: mysql:8.0
@@ -28,22 +29,33 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672" # Management console
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  microservicio-cliente-persona:
+  client-person:
     build:
-      context: ./microservicio-cliente-persona
+      context: ./client-person
       dockerfile: Dockerfile
-    container_name: microservicio-cliente-persona
+    container_name: client-person
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql1:3306/cliente_persona
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-      SPRING_RABBITMQ_HOST: rabbitmq
+      ConnectionStrings__DefaultConnection: Host=postgres_db;Port=5432;Database=client_db;Username=postgres;Password=postgres
+      RabbitMQ__Host: rabbitmq
+      RabbitMQ__UserName: guest
+      RabbitMQ__Password: guest
+      RabbitMQ__RequestQueue: cliente_request_queue
+      RabbitMQ__ResponseQueue: cliente_response_queue
+      RabbitMQ__ResponseExchange: cliente_response_exchange
+      RabbitMQ__ResponseRoutingKey: cliente_response_routing_key
     depends_on:
-      - mysql1
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
+      postgres_db:
+        condition: service_started
 
   microservicio-cuenta-movimientos:
     build:
@@ -62,5 +74,5 @@ services:
       - rabbitmq
 
 volumes:
-  mysql1-data:
+  pgdata1:
   mysql2-data:

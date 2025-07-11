@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "i0iiQg09PTV7f+6d88bMfB+dE3f6D4t/mdmzt81pJd4=",
+  "Source": "client-person",
+  "BasePath": "_content/client-person",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
