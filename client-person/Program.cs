@@ -40,17 +40,17 @@ app.Use(async (context, next) =>
    await next();
 });
 
-// Configure the HTTP request pipeline.
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+    await dbContext.Database.MigrateAsync();
+}
 
-    app.UseSwagger();
-    app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI();
-
-
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 app.MapControllers();
 
 
-app.Run();
+await app.RunAsync();

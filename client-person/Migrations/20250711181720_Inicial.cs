@@ -18,12 +18,12 @@ namespace client_person.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    fullName = table.Column<string>(type: "text", nullable: true),
+                    fullName = table.Column<string>(type: "text", nullable: false),
                     genderPerson = table.Column<int>(type: "integer", nullable: false),
                     age = table.Column<int>(type: "integer", nullable: false),
                     identification = table.Column<string>(type: "text", nullable: false),
-                    address = table.Column<string>(type: "text", nullable: true),
-                    phone = table.Column<string>(type: "text", nullable: true),
+                    address = table.Column<string>(type: "text", nullable: false),
+                    phone = table.Column<string>(type: "text", nullable: false),
                     creationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW()")
                 },
                 constraints: table =>
@@ -36,7 +36,7 @@ namespace client_person.Migrations
                 columns: table => new
                 {
                     id = table.Column<long>(type: "bigint", nullable: false),
-                    password = table.Column<string>(type: "text", nullable: false),
+                    password = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     state = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true)
                 },
                 constraints: table =>

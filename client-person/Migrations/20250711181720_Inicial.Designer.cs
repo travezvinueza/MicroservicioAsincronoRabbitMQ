@@ -12,7 +12,7 @@ using client_person.Data;
 namespace client_person.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250710145720_Inicial")]
+    [Migration("20250711181720_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -34,6 +34,7 @@ namespace client_person.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("id"));
 
                     b.Property<string>("address")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("age")
@@ -45,6 +46,7 @@ namespace client_person.Migrations
                         .HasDefaultValueSql("NOW()");
 
                     b.Property<string>("fullName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("genderPerson")
@@ -55,6 +57,7 @@ namespace client_person.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("phone")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("id");
@@ -73,7 +76,8 @@ namespace client_person.Migrations
 
                     b.Property<string>("password")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<bool>("state")
                         .ValueGeneratedOnAdd()

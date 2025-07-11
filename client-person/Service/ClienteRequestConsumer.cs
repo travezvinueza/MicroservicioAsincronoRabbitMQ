@@ -82,7 +82,9 @@ namespace client_person.Service
                         var fullName = input.Trim('"');
                         clienteDb = await repository.GetByFullNameAsync(fullName);
                     }
-                    var dto = clienteDb != null ? mapper.MapClientToDto(clienteDb) : new ClienteDto();
+
+                    var dto = clienteDb != null ? mapper.MapClientToDto(clienteDb) : new ClienteDto { identification = "NOT_FOUND", fullName = "NOT_FOUND" };
+
                     var json = JsonSerializer.Serialize(dto);
                     var body = Encoding.UTF8.GetBytes(json);
                     var props = new BasicProperties
@@ -90,7 +92,6 @@ namespace client_person.Service
                         Persistent = true,
                         ContentType = "application/json"
                     };
-
 
                     await channel.BasicPublishAsync(
                         exchange: _settings.ResponseExchange!,
@@ -101,16 +102,18 @@ namespace client_person.Service
                     );
 
                     Console.WriteLine($"✅ Cliente enviado: {dto.identification} - {dto.fullName} : {json}");
+                     await channel.BasicAckAsync(ea.DeliveryTag, multiple: false);
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"❌ Error al procesar mensaje: {ex.Message}");
+                    await channel.BasicNackAsync(ea.DeliveryTag, multiple: false, requeue: false);
                 }
             };
 
             await channel.BasicConsumeAsync(
                 queue: _settings.RequestQueue!,
-                autoAck: true,
+                autoAck: false,
                 consumer: consumer
             );
 

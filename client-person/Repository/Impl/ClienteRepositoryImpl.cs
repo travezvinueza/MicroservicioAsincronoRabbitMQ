@@ -25,7 +25,8 @@ namespace client_person.Repository.Impl
         public async Task<Cliente> GetByFullNameAsync(string fullName)
         {
             var cliente = await _context.Clientes
-                .FirstOrDefaultAsync(c => c.fullName == fullName);
+               .Where(c => c.fullName!.Contains(fullName))
+               .FirstOrDefaultAsync();
 
             return cliente ?? throw new InvalidOperationException($"Cliente con nombre completo {fullName} no encontrado.");
         }

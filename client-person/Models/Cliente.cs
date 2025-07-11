@@ -7,6 +7,7 @@ namespace client_person.Models
     public class Cliente : Persona
     {
         [Required]
+        [StringLength(200, MinimumLength = 6)]
         public string? password { get; set; }
 
         public bool state { get; set; }

@@ -1,7 +1,9 @@
+using System.Text.Json.Serialization;
 using client_person.Enum;
 
 namespace client_person.Dto
 {
+    [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
     public class ClienteDto
     {
         public long id { get; set; }
