@@ -43,11 +43,7 @@ public class CuentaServiceImpl implements CuentaService {
         try {
             clienteDTO = clienteResponseConsumer.obtenerClienteDTO().get(5, TimeUnit.SECONDS);
         } catch (Exception e) {
-            throw new RuntimeException("❌ Error al obtener el cliente: " + e.getMessage(), e);
-        }
-
-        if (clienteDTO == null || clienteDTO.getIdentification() == null) {
-            throw new RecursoNoEncontradoException("❌ Cliente no encontrado. No se puede crear la cuenta");
+            throw new RecursoNoEncontradoException("❌ Error al obtener el cliente: " + e.getMessage());
         }
 
         cuentaDTO.setIdentificationClient(clienteDTO.getIdentification());

@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @Slf4j
 @Service
@@ -34,11 +36,11 @@ public class EstadoCuentaServiceImpl implements EstadoCuentaService {
 
         // Obtener el cliente desde RabbitMQ
         CompletableFuture<ClienteDTO> clienteDTOCompletableFuture = clienteResponse.obtenerClienteDTO();
-        ClienteDTO clienteDTO = clienteDTOCompletableFuture.get();
-        log.info("Final DTO: {}", clienteDTO);
-
-        if (clienteDTO == null || clienteDTO.getIdentification() == null) {
-            throw new RecursoNoEncontradoException("❌ Cliente no encontrado con el nombre proporcionado");
+        ClienteDTO clienteDTO;
+        try {
+            clienteDTO = clienteDTOCompletableFuture.get(5, TimeUnit.SECONDS); // ✅ evita bloqueo
+        }  catch (Exception e) {
+            throw new RecursoNoEncontradoException("❌ Error al obtener cliente: " + e.getMessage());
         }
 
         // Obtener las cuentas

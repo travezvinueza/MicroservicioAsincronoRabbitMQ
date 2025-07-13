@@ -6,8 +6,8 @@ using client_person.Repository;
 using client_person.Models;
 using client_person.Mapper;
 using client_person.Dto;
-using System.Text.Json;
 using RabbitMQ.Client.Events;
+using client_person.Service.Impl;
 
 namespace client_person.Service
 {
@@ -32,15 +32,9 @@ namespace client_person.Service
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-
+            
             var connection = await _factory.CreateConnectionAsync();
             var channel = await connection.CreateChannelAsync();
-
-            await channel.ExchangeDeclareAsync(
-                      exchange: _settings.ResponseExchange!,
-                       type: ExchangeType.Direct,
-                       durable: true
-                );
 
             await channel.QueueDeclareAsync(
                     queue: _settings.RequestQueue!,
@@ -48,12 +42,6 @@ namespace client_person.Service
                     exclusive: false,
                     autoDelete: false,
                     arguments: null
-                );
-
-            await channel.QueueBindAsync(
-                  queue: _settings.ResponseQueue!,
-                  exchange: _settings.ResponseExchange!,
-                  routingKey: _settings.ResponseRoutingKey!
                 );
 
             var consumer = new AsyncEventingBasicConsumer(channel);
@@ -69,9 +57,9 @@ namespace client_person.Service
 
                     var repository = scope.ServiceProvider.GetRequiredService<IClienteRepository>();
                     var mapper = scope.ServiceProvider.GetRequiredService<ClientMapper>();
+                    var responseProducer = scope.ServiceProvider.GetRequiredService<ClienteResponseProducer>();
 
                     Cliente? clienteDb;
-
                     if (EsIdentificacion(input.Trim('"')))
                     {
                         var identificacion = input.Trim('"');
@@ -83,26 +71,13 @@ namespace client_person.Service
                         clienteDb = await repository.GetByFullNameAsync(fullName);
                     }
 
-                    var dto = clienteDb != null ? mapper.MapClientToDto(clienteDb) : new ClienteDto { identification = "NOT_FOUND", fullName = "NOT_FOUND" };
+                    ClienteDto dto = (clienteDb != null)
+                       ? mapper.MapClientToDto(clienteDb)
+                       : new ClienteDto();
 
-                    var json = JsonSerializer.Serialize(dto);
-                    var body = Encoding.UTF8.GetBytes(json);
-                    var props = new BasicProperties
-                    {
-                        Persistent = true,
-                        ContentType = "application/json"
-                    };
+                    await responseProducer.EnviarClienteAsync(dto, channel);
+                    await channel.BasicAckAsync(ea.DeliveryTag, multiple: false);
 
-                    await channel.BasicPublishAsync(
-                        exchange: _settings.ResponseExchange!,
-                        routingKey: _settings.ResponseRoutingKey!,
-                        mandatory: true,
-                        basicProperties: props,
-                        body: body
-                    );
-
-                    Console.WriteLine($"✅ Cliente enviado: {dto.identification} - {dto.fullName} : {json}");
-                     await channel.BasicAckAsync(ea.DeliveryTag, multiple: false);
                 }
                 catch (Exception ex)
                 {

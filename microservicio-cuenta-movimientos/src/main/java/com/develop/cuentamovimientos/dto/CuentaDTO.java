@@ -15,7 +15,7 @@ public class CuentaDTO {
     private String accountNumber;
     @NotNull(message = "El tipo de cuenta es obligatorio")
     private AccountType accountType;
-    @Min(value = 1, message = "El saldo inicial debe ser mayor a cero")
+    @Min(value = 0, message = "El saldo inicial debe ser mayor o igual a cero")
     private double initialBalance;
     private boolean state;
     @NotBlank(message = "La identificacion no debe estar en blanco")

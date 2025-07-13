@@ -16,6 +16,7 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 
 builder.Services.AddTransient<IClienteService, ClientesServiceImpl>();
 builder.Services.AddHostedService<ClienteRequestConsumer>();
+builder.Services.AddSingleton<ClienteResponseProducer>();
 builder.Services.AddSingleton<ClientMapper>();
 builder.Services.AddScoped<IClienteRepository, ClienteRepositoryImpl>();
 

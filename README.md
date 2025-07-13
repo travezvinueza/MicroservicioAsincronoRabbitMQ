@@ -1,16 +1,16 @@
 # Programación Reactiva con RabbitMQ
 
-Proyecto realizado bajo mvc con arquitetcura de microservicios para clientes y sus movimientos! Este proyecto está desarrollado en Java utilizando Spring
+Proyecto realizado bajo mvc con arquitetcura de microservicios para clientes y sus movimientos!
 
 ## Tecnologías Utilizadas
 
-- Spring Boot: Para la construcción de microservicios.
+- .Net: Para la construcción del primer microservicio de cliente-persona.
+- Spring Boot: Para la construcción del segundo microservicio de cuenta-movimientos .
 - RabbitMQ: Para la comunicacion asincrona.
-- MySQL: Bases de datos relacionales para el almacenamiento de datos.
+- PostgreSQL y MySQL: Bases de datos relacionales para el almacenamiento de datos.
 - Docker: Para la contenerización y despliegue en cualquier entorno.
-- ModelMapper: Para mapear objetos de un modelo a otro.
+- ModelMapper y Riok.Mapperly: Para mapear objetos de un modelo a otro.
 - OpenAPI: Para la documentación de la API.
-- JUnit: Para pruebas unitarias.
 
 # Configuración
 
@@ -29,7 +29,3 @@ El proyecto tiene swagger para la documentacion de endpoints.
 ```
 
 ## Imagenes
-![report](https://github.com/user-attachments/assets/f9bd0667-d18f-47e1-b680-fba4db11541c)
-![json](https://github.com/user-attachments/assets/511666fb-fc85-4d9c-9653-ef49683014fa)
-![client](https://github.com/user-attachments/assets/2d503f4a-e92a-4219-a4d3-4d347185d32e)
-![account](https://github.com/user-attachments/assets/fdf07a66-6089-4e58-9c9d-77a39c1821c3)
