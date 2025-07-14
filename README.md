@@ -29,3 +29,4 @@ El proyecto tiene swagger para la documentacion de endpoints.
 ```
 
 ## Imagenes
+<img width="1024" height="1024" alt="micro" src="https://github.com/user-attachments/assets/90346e69-cf34-44d6-a9b5-28c0be61b488" />
