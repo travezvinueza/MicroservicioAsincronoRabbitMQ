@@ -18,7 +18,6 @@ namespace client_person.Models
         public GenderPerson genderPerson { get; set; }
 
         [Required]
-        [Range(0, 120, ErrorMessage = "La edad debe estar entre 0 y 120.")]
         public int age { get; set; }
 
         [Required]
@@ -28,7 +27,6 @@ namespace client_person.Models
         public string? address { get; set; }
 
         [Required]
-        [Phone]
         public string? phone { get; set; }
 
         public DateTime creationDate { get; set; }

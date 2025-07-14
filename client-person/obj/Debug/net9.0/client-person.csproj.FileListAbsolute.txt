@@ -409,3 +409,4 @@ C:\PROYECTOS\reto-tecnico-microservicios\client-person\obj\Debug\net9.0\refint\c
 C:\PROYECTOS\reto-tecnico-microservicios\client-person\obj\Debug\net9.0\client-person.pdb
 C:\PROYECTOS\reto-tecnico-microservicios\client-person\obj\Debug\net9.0\client-person.genruntimeconfig.cache
 C:\PROYECTOS\reto-tecnico-microservicios\client-person\obj\Debug\net9.0\ref\client-person.dll
+C:\PROYECTOS\reto-tecnico-microservicios\client-person\bin\Debug\net9.0\BCrypt.Net-Next.dll

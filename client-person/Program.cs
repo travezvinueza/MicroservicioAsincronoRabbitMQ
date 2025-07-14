@@ -2,7 +2,6 @@ using client_person.Config;
 using client_person.Data;
 using client_person.Mapper;
 using client_person.Repository;
-using client_person.Repository.Impl;
 using client_person.Service;
 using client_person.Service.Impl;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +17,7 @@ builder.Services.AddTransient<IClienteService, ClientesServiceImpl>();
 builder.Services.AddHostedService<ClienteRequestConsumer>();
 builder.Services.AddSingleton<ClienteResponseProducer>();
 builder.Services.AddSingleton<ClientMapper>();
-builder.Services.AddScoped<IClienteRepository, ClienteRepositoryImpl>();
+builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 
 builder.Services.Configure<RabbitMQSettings>(
     builder.Configuration.GetSection("RabbitMQ"));

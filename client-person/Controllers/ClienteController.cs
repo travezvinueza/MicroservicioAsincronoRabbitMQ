@@ -37,8 +37,13 @@ namespace client_person.Controllers
         [HttpPost]
         public async Task<ActionResult<ClienteDto>> Create([FromBody] ClienteDto dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var created = await _clienteService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = created.id }, created);
+            return Ok(created);
         }
 
         // PUT: api/cliente/5

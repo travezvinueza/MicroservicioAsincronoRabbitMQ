@@ -2,23 +2,30 @@ using client_person.Data;
 using client_person.Dto;
 using client_person.Mapper;
 using Microsoft.EntityFrameworkCore;
-
 namespace client_person.Service.Impl
 {
 
     public class ClientesServiceImpl : IClienteService
     {
         private readonly DatabaseContext _context;
+       
         private readonly ClientMapper _mapper;
         public ClientesServiceImpl(DatabaseContext context, ClientMapper mapper)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _context = context;
+            _mapper = mapper;
         }
-        
+
         public async Task<ClienteDto> CreateAsync(ClienteDto dto)
         {
+            var exists = await _context.Clientes.AnyAsync(c => c.identification == dto.identification);
+            if (exists)
+            {
+                throw new InvalidOperationException($"Ya existe un cliente con la identificación: {dto.identification}");
+            }
+
             var entity = _mapper.MapDtoToClient(dto);
+            entity.password = BCrypt.Net.BCrypt.HashPassword(dto.password);
             _context.Clientes.Add(entity);
             await _context.SaveChangesAsync();
             return _mapper.MapClientToDto(entity);
@@ -26,7 +33,7 @@ namespace client_person.Service.Impl
 
         public async Task<bool> DeleteAsync(long id)
         {
-           var cliente = await _context.Clientes.FindAsync(id);
+            var cliente = await _context.Clientes.FindAsync(id);
             if (cliente == null)
                 return false;
 
@@ -56,7 +63,10 @@ namespace client_person.Service.Impl
             cliente.fullName = dto.fullName;
             cliente.address = dto.address;
             cliente.phone = dto.phone;
-            cliente.password = dto.password;
+            if (!string.IsNullOrWhiteSpace(dto.password))
+            {
+                cliente.password = BCrypt.Net.BCrypt.HashPassword(dto.password);
+            }
             cliente.genderPerson = dto.genderPerson;
             cliente.identification = dto.identification;
             cliente.age = dto.age;

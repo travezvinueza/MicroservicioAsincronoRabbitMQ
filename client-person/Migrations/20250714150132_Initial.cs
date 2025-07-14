@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace client_person.Migrations
 {
     /// <inheritdoc />
-    public partial class Inicial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,7 +36,7 @@ namespace client_person.Migrations
                 columns: table => new
                 {
                     id = table.Column<long>(type: "bigint", nullable: false),
-                    password = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    password = table.Column<string>(type: "text", nullable: false),
                     state = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true)
                 },
                 constraints: table =>

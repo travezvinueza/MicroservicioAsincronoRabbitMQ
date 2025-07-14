@@ -12,8 +12,8 @@ using client_person.Data;
 namespace client_person.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250711181720_Inicial")]
-    partial class Inicial
+    [Migration("20250714150132_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,8 +76,7 @@ namespace client_person.Migrations
 
                     b.Property<string>("password")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("state")
                         .ValueGeneratedOnAdd()

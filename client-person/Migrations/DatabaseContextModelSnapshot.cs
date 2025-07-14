@@ -73,8 +73,7 @@ namespace client_person.Migrations
 
                     b.Property<string>("password")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("state")
                         .ValueGeneratedOnAdd()
