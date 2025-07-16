@@ -14,6 +14,23 @@ Proyecto realizado bajo mvc con arquitetcura de microservicios para clientes y s
 
 # Configuración
 
+```
+### Pasos que se realizo para generar los tests unitarios y de integración del primer microservicio cliente-persona desarrollado con .Net y C#
+- Generar el proyecto test en la raiz => dotnet new xunit -o client-person.Tests
+- Ingresar al proyecto => cd client-person.Tests
+- Dentro del proyecto hacer referencia => dotnet add reference ../client-person/client-person.csproj
+
+### Instalar paquetes
+- Mockea => dotnet add package Moq
+- Guarda los datos en memoria => dotnet add package Microsoft.EntityFrameworkCore.InMemory
+
+### Comandos test
+- Comando básico para ejecutar todos los tests => dotnet test
+- El mismo comando pero con más detalle en la salida => dotnet test --logger "console;verbosity=detailed"
+- Ejecuta todos los test de tu clase => dotnet test --filter "FullyQualifiedName~ClientServiceTest"
+- Ejecuta un test especifico => dotnet test --filter "FullyQualifiedName~ClientControllersTest.Update_ExistingId_ReturnsOk"
+```
+
 El proyecto tiene swagger para la documentacion de endpoints.
 
 - El primer servicio se deplega en el puerto 8080 

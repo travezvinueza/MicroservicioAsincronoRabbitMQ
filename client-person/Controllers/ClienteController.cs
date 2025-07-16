@@ -19,18 +19,18 @@ namespace client_person.Controllers
         public async Task<ActionResult<IEnumerable<ClienteDto>>> GetAll()
         {
             var clientes = await _clienteService.GetAllAsync();
-            return Ok(clientes);
+            return clientes;
         }
 
         // GET: api/cliente/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ClienteDto>> GetById(int id)
+        public async Task<ActionResult<ClienteDto>> GetById(long id)
         {
             var cliente = await _clienteService.GetByIdAsync(id);
             if (cliente == null)
-                return NotFound($"Cliente con ID {id} no encontrado.");
+                return NotFound();
 
-            return Ok(cliente);
+            return cliente;
         }
 
         // POST: api/cliente
@@ -48,22 +48,22 @@ namespace client_person.Controllers
 
         // PUT: api/cliente/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<ClienteDto>> Update(int id, [FromBody] ClienteDto dto)
+        public async Task<ActionResult<ClienteDto>> Update(long id, [FromBody] ClienteDto dto)
         {
             var updated = await _clienteService.UpdateAsync(id, dto);
             if (updated == null)
-                return NotFound($"No se pudo actualizar. Cliente con ID {id} no encontrado.");
+                return NotFound();
 
             return Ok(updated);
         }
 
         // DELETE: api/cliente/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(long id)
         {
             var deleted = await _clienteService.DeleteAsync(id);
             if (!deleted)
-                return NotFound($"No se encontró el cliente con ID {id}.");
+                return NotFound();
 
             return NoContent();
         }
