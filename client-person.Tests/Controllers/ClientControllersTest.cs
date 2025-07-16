@@ -21,7 +21,7 @@ namespace client_person.Tests.Controllers
             _controller = new ClienteController(_clienteServiceMock.Object);
         }
 
-        [Fact] //Paso
+        [Fact] 
         public async Task GetAll_ReturnsOkResult_WithListOfClientes()
         {
             var clientes = new List<ClienteDto>
@@ -37,7 +37,7 @@ namespace client_person.Tests.Controllers
 
         }
 
-        [Fact] //Paso
+        [Fact] 
         public async Task GetById_ExistingId_ReturnsOkWithCliente()
         {
             var cliente = new ClienteDto { id = 1, fullName = "Cliente 1", genderPerson = GenderPerson.MASCULINO, age = 30, identification = "1234567890", address = "Address 1", phone = "1234567890", password = "password1", state = true };
@@ -48,7 +48,7 @@ namespace client_person.Tests.Controllers
             Assert.Equal(cliente, result.Value);
         }
 
-        [Fact] //Paso
+        [Fact]
         public async Task GetById_ReturnsNotFound_WhenDoesNotExist()
         {
             _clienteServiceMock.Setup(service => service.GetByIdAsync(99)).ReturnsAsync((ClienteDto)null);
@@ -58,7 +58,7 @@ namespace client_person.Tests.Controllers
             Assert.IsType<NotFoundResult>(result.Result);
         }
 
-        [Fact] //Paso
+        [Fact] 
         public async Task Create_ValidCliente_ReturnsOk()
         {
             var dto = new ClienteDto { fullName = "Nuevo Cliente", genderPerson = GenderPerson.MASCULINO, age = 30, identification = "1234567890", address = "Nueva Dirección", phone = "1234567890", password = "password123", state = true };
@@ -71,7 +71,7 @@ namespace client_person.Tests.Controllers
             Assert.Equal(dto.fullName, returnValue.fullName);
         }
 
-        [Fact]  //Paso
+        [Fact] 
         public async Task Create_InvalidModel_ReturnsBadRequest()
         {
             _controller.ModelState.AddModelError("fullName", "Required");
