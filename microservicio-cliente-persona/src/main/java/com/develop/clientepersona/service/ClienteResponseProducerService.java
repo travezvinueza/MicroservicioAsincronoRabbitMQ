@@ -15,7 +15,7 @@ public class ClienteResponseProducerService {
     private String exchange;
 
     @Value("${spring.rabbitmq.response.routingKey}")
-    private String routingKey;
+    private String routingKey; //Es una clave de enrutamiento, usada por RabbitMQ para decidir a qué cola específica debe ir el mensaje dentro del exchange.
 
     private final RabbitTemplate rabbitTemplate;
 

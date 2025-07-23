@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -27,18 +28,18 @@ public class EstadoCuentaServiceImpl implements EstadoCuentaService {
     private final MovimientoService movimientoService;
 
     @Override
-    public EstadoCuentaDTO obtenerEstadoCuenta(LocalDate fechaInicio, LocalDate fechaFin, String fullName)
+    public EstadoCuentaDTO obtenerEstadoCuenta(LocalDate fechaInicio, LocalDate fechaFin, String identification)
             throws ExecutionException, InterruptedException {
 
-        clienteRequestService.obtenerClientePorNombreCompleto(fullName);
+        clienteRequestService.obtenerClientePorIdentificacion(identification);
 
         // Obtener el cliente desde RabbitMQ
         CompletableFuture<ClienteDTO> clienteDTOCompletableFuture = clienteResponse.obtenerClienteDTO();
-        ClienteDTO clienteDTO = clienteDTOCompletableFuture.get();
-        log.info("Final DTO: {}", clienteDTO);
-
-        if (clienteDTO == null || clienteDTO.getIdentification() == null) {
-            throw new RecursoNoEncontradoException("❌ Cliente no encontrado con el nombre proporcionado");
+        ClienteDTO clienteDTO;
+        try {
+            clienteDTO = clienteDTOCompletableFuture.get(5, TimeUnit.SECONDS); // ✅ evita bloqueo
+        }  catch (Exception e) {
+            throw new RecursoNoEncontradoException("❌ Error al obtener cliente: " + e.getMessage());
         }
 
         // Obtener las cuentas

@@ -1,18 +1,20 @@
-package com.develop.clientepersona.controller;
+package com.develop.cuentamovimientos.controller;
 
-import com.develop.clientepersona.service.ClienteService;
+import com.develop.cuentamovimientos.service.MovimientoService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @ExtendWith(MockitoExtension.class)
-class ClienteControllerTest {
+class MovimientoControllerTest {
     @InjectMocks
-    private ClienteController clientController;
+    private MovimientoController movimientoController;
     @Mock
-    private ClienteService clientService;
+    private MovimientoService movimientoService;
 
 
     @Test

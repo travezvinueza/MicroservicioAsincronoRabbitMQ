@@ -43,8 +43,8 @@ public class MovimientoController {
     }
 
     @PutMapping
-    public ResponseEntity <MovimientoDTO> actualizar(@RequestBody MovimientoDTO movimientoDTO){
-        return  new ResponseEntity<>(movimientoService.crear(movimientoDTO), HttpStatus.OK);
+    public ResponseEntity<MovimientoDTO> actualizar(@RequestBody MovimientoDTO movimientoDTO){
+        return  new ResponseEntity<>(movimientoService.actualizar(movimientoDTO), HttpStatus.OK);
     }
 
 }
