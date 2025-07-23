@@ -1,5 +1,6 @@
 using client_person.Config;
 using client_person.Data;
+using client_person.Exceptions;
 using client_person.Mapper;
 using client_person.Repository;
 using client_person.Service;
@@ -7,6 +8,9 @@ using client_person.Service.Impl;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails(); // necesario para usar IProblemDetailsService
 
 builder.Services.AddControllers();
 
@@ -50,6 +54,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+app.UseExceptionHandler();
 app.MapControllers();
 
 

@@ -2,13 +2,14 @@ using client_person.Data;
 using client_person.Dto;
 using client_person.Mapper;
 using Microsoft.EntityFrameworkCore;
+using static client_person.Exceptions.CustomExceptions;
 namespace client_person.Service.Impl
 {
 
     public class ClientesServiceImpl : IClienteService
     {
         private readonly DatabaseContext _context;
-       
+
         private readonly ClientMapper _mapper;
         public ClientesServiceImpl(DatabaseContext context, ClientMapper mapper)
         {
@@ -21,7 +22,7 @@ namespace client_person.Service.Impl
             var exists = await _context.Clientes.AnyAsync(c => c.identification == dto.identification);
             if (exists)
             {
-                throw new InvalidOperationException($"Ya existe un cliente con la identificación: {dto.identification}");
+                throw new ConflictException($"Ya existe un cliente con la identificación: {dto.identification}");
             }
 
             var entity = _mapper.MapDtoToClient(dto);
@@ -42,9 +43,15 @@ namespace client_person.Service.Impl
             return true;
         }
 
-        public async Task<List<ClienteDto>> GetAllAsync()
+        public async Task<List<ClienteDto>> GetAllAsync(int limit = 10, int lastId = 0)
         {
-            var clientes = await _context.Clientes.ToListAsync();
+            var clientes = await _context.Clientes
+            .AsNoTracking()
+            .Where(c => c.id > lastId)
+            .OrderBy(c => c.id)
+            .Take(limit)
+            .ToListAsync();
+
             return clientes.Select(_mapper.MapClientToDto).ToList();
         }
 

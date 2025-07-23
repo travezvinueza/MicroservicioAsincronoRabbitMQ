@@ -22,7 +22,7 @@ namespace client_person.Dto
         public int age { get; set; }
 
         [Required(ErrorMessage = "La identificación es obligatoria.")]
-        [RegularExpression(@"^\d{10}(\d{3})?$", ErrorMessage = "La identificación debe tener 10 o 13 dígitos numéricos.")]
+        [RegularExpression(@"^\d{10}(\d{13})?$", ErrorMessage = "La identificación debe tener 10 o 13 dígitos numéricos.")]
         public string? identification { get; set; }
        
         [Required(ErrorMessage = "La dirección es obligatoria.")]

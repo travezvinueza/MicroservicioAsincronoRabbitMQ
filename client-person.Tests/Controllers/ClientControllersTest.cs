@@ -21,7 +21,7 @@ namespace client_person.Tests.Controllers
             _controller = new ClienteController(_clienteServiceMock.Object);
         }
 
-        [Fact] 
+        [Fact]
         public async Task GetAll_ReturnsOkResult_WithListOfClientes()
         {
             var clientes = new List<ClienteDto>
@@ -30,14 +30,19 @@ namespace client_person.Tests.Controllers
                new ClienteDto { id = 2, fullName = "Cliente 2", genderPerson = GenderPerson.FEMENINO, age = 25, identification = "0987654321", address = "Address 2", phone = "0987654321", password = "password2", state = true }
             };
 
-            _clienteServiceMock.Setup(service => service.GetAllAsync()).ReturnsAsync(clientes);
+            _clienteServiceMock.Setup(service => service.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
+                      .ReturnsAsync(clientes);
 
             var result = await _controller.GetAll();
-            Assert.Equal(clientes, result.Value);
 
+            var okResult = Assert.IsType<OkObjectResult>(result.Result);
+            var returnClientes = Assert.IsAssignableFrom<List<ClienteDto>>(okResult.Value);
+            Assert.Equal(2, returnClientes.Count);
+            Assert.Equal(clientes[0].identification, returnClientes[0].identification);
+            Assert.Equal(clientes[1].identification, returnClientes[1].identification);
         }
 
-        [Fact] 
+        [Fact]
         public async Task GetById_ExistingId_ReturnsOkWithCliente()
         {
             var cliente = new ClienteDto { id = 1, fullName = "Cliente 1", genderPerson = GenderPerson.MASCULINO, age = 30, identification = "1234567890", address = "Address 1", phone = "1234567890", password = "password1", state = true };
@@ -58,7 +63,7 @@ namespace client_person.Tests.Controllers
             Assert.IsType<NotFoundResult>(result.Result);
         }
 
-        [Fact] 
+        [Fact]
         public async Task Create_ValidCliente_ReturnsOk()
         {
             var dto = new ClienteDto { fullName = "Nuevo Cliente", genderPerson = GenderPerson.MASCULINO, age = 30, identification = "1234567890", address = "Nueva Dirección", phone = "1234567890", password = "password123", state = true };
@@ -71,7 +76,7 @@ namespace client_person.Tests.Controllers
             Assert.Equal(dto.fullName, returnValue.fullName);
         }
 
-        [Fact] 
+        [Fact]
         public async Task Create_InvalidModel_ReturnsBadRequest()
         {
             _controller.ModelState.AddModelError("fullName", "Required");

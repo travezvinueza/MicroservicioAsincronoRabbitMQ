@@ -8,6 +8,7 @@ using client_person.Mapper;
 using client_person.Enum;
 using BCrypt.Net;
 using System.Threading.Tasks;
+using static client_person.Exceptions.CustomExceptions;
 
 namespace client_person.Tests.Services
 {
@@ -93,7 +94,7 @@ namespace client_person.Tests.Services
             };
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => service.CreateAsync(duplicateDto));
+            await Assert.ThrowsAsync<ConflictException>(() => service.CreateAsync(duplicateDto));
         }
 
         [Fact]
@@ -112,7 +113,7 @@ namespace client_person.Tests.Services
                 identification = "1111111111",
                 address = "Direccion 1",
                 phone = "0991111111",
-                password = BCrypt.Net.BCrypt.HashPassword("1234"),
+                password = BCrypt.Net.BCrypt.HashPassword("123456"),
                 state = true
             });
 
@@ -124,14 +125,14 @@ namespace client_person.Tests.Services
                 identification = "2222222222",
                 address = "Direccion 2",
                 phone = "0992222222",
-                password = BCrypt.Net.BCrypt.HashPassword("abcd"),
+                password = BCrypt.Net.BCrypt.HashPassword("abcdef"),
                 state = true
             });
 
             await context.SaveChangesAsync();
 
             // Act
-            var result = await service.GetAllAsync();
+            var result = await service.GetAllAsync(limit: 10, lastId: 0);
 
             // Assert
             Assert.Equal(2, result.Count);

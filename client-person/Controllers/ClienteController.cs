@@ -16,10 +16,10 @@ namespace client_person.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ClienteDto>>> GetAll()
+        public async Task<ActionResult<List<ClienteDto>>> GetAll(int limit = 10, int lastId = 0)
         {
-            var clientes = await _clienteService.GetAllAsync();
-            return clientes;
+            var clientes = await _clienteService.GetAllAsync(limit, lastId);
+            return Ok(clientes);
         }
 
         // GET: api/cliente/5
