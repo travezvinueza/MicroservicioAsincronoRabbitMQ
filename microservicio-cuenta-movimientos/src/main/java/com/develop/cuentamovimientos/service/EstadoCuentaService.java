@@ -6,6 +6,6 @@ import java.time.LocalDate;
 import java.util.concurrent.ExecutionException;
 
 public interface EstadoCuentaService {
-    EstadoCuentaDTO obtenerEstadoCuenta(LocalDate fechaInicio, LocalDate fechaFin, String fullName)
+    EstadoCuentaDTO obtenerEstadoCuenta(LocalDate fechaInicio, LocalDate fechaFin, String identification)
             throws ExecutionException, InterruptedException;
 }

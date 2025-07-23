@@ -29,10 +29,10 @@ public class EstadoCuentaServiceImpl implements EstadoCuentaService {
     private final MovimientoService movimientoService;
 
     @Override
-    public EstadoCuentaDTO obtenerEstadoCuenta(LocalDate fechaInicio, LocalDate fechaFin, String fullName)
+    public EstadoCuentaDTO obtenerEstadoCuenta(LocalDate fechaInicio, LocalDate fechaFin, String identification)
             throws ExecutionException, InterruptedException {
 
-        clienteRequestService.obtenerClientePorNombreCompleto(fullName);
+        clienteRequestService.obtenerClientePorIdentificacion(identification);
 
         // Obtener el cliente desde RabbitMQ
         CompletableFuture<ClienteDTO> clienteDTOCompletableFuture = clienteResponse.obtenerClienteDTO();
@@ -57,7 +57,6 @@ public class EstadoCuentaServiceImpl implements EstadoCuentaService {
             reporteCuentaMovimientos.add(reporteCuentaMovimiento);
         }
 
-        // Devolver directamente el nuevo DTO sin asignarlo a una variable local
         return new EstadoCuentaDTO(clienteDTO, reporteCuentaMovimientos);
     }
 }
