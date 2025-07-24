@@ -38,6 +38,9 @@ public class EstadoCuentaServiceImpl implements EstadoCuentaService {
         ClienteDTO clienteDTO;
         try {
             clienteDTO = clienteDTOCompletableFuture.get(5, TimeUnit.SECONDS); // ✅ evita bloqueo
+            if (clienteDTO == null || clienteDTO.getIdentification() == null) {
+                throw new RecursoNoEncontradoException("❌ Cliente no encontrado o identificación inválida");
+            }
         }  catch (Exception e) {
             throw new RecursoNoEncontradoException("❌ Error al obtener cliente: " + e.getMessage());
         }

@@ -43,7 +43,7 @@ public class CuentaServiceImpl implements CuentaService {
         try {
             clienteDTO = clienteResponseConsumer.obtenerClienteDTO().get(5, TimeUnit.SECONDS);
             if (clienteDTO == null || clienteDTO.getIdentification() == null) {
-                throw new RecursoNoEncontradoException("❌ No se recibió información válida del cliente");
+                throw new RecursoNoEncontradoException("❌ Cliente no encontrado o identificación inválida");
             }
         } catch (Exception e) {
             throw new RecursoNoEncontradoException("❌ Error al obtener el cliente: " + e.getMessage());
