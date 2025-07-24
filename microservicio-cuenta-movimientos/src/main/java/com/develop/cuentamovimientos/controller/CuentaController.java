@@ -28,7 +28,7 @@ public class CuentaController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "5") int size
     ){
-        Pageable pageable = PageRequest.of(0, 5);
+        Pageable pageable = PageRequest.of(page, size);
         Page<CuentaDTO> cuentaDTOPage = cuentaService.listar(pageable);
         return ResponseEntity.ok(cuentaDTOPage);
     }
