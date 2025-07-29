@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
 
-@Service
 @Slf4j
 @Getter
+@Service
 public class ClienteResponseConsumer {
 
     private CompletableFuture<ClienteDTO> clienteDTOCompletableFuture = new CompletableFuture<>();
@@ -18,7 +18,6 @@ public class ClienteResponseConsumer {
     @RabbitListener(queues = "${spring.rabbitmq.response.queue}")
     public void recibirClienteDTO(ClienteDTO clienteDTO) {
         log.info("Cliente recibido: {}", clienteDTO);
-        log.info("Cliente: {}", clienteDTO);
 
         clienteDTOCompletableFuture.complete(clienteDTO);
         clienteDTOCompletableFuture = new CompletableFuture<>();

@@ -34,39 +34,37 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RecursoNoEncontradoException.class)
     public ResponseEntity<RespuestaError> handleRecursoNoEncontradoException(RecursoNoEncontradoException exception,
-                                                                            WebRequest webRequest
-    ){
+                                                                             WebRequest webRequest
+    ) {
         RespuestaError respuestaError = new RespuestaError(
                 LocalDateTime.now(),
                 exception.getMessage(),
                 webRequest.getDescription(false),
-                MensajeError.RECURSO_NO_ENCONTRADO
-        );
+                MensajeError.RECURSO_NO_ENCONTRADO);
         return new ResponseEntity<>(respuestaError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<RespuestaError> handleDateIntegrityViolationException(
             DataIntegrityViolationException ex, WebRequest request
-    ){
+    ) {
         RespuestaError respuestaError = new RespuestaError(
                 LocalDateTime.now(),
                 ex.getMessage(),
                 request.getDescription(false),
-                MensajeError.VALOR_YA_REGISTRADO + ex.getMessage().substring(46,56)
-        );
+                MensajeError.VALOR_YA_REGISTRADO + ex.getMessage().substring(46, 56));
         return new ResponseEntity<>(respuestaError, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(CedulaInvalidaException.class)
     public ResponseEntity<RespuestaError> handleCedulaInvalidaException(
             CedulaInvalidaException ex, WebRequest request
-    ){
+    ) {
         RespuestaError respuestaError = new RespuestaError(
                 LocalDateTime.now(),
                 ex.getMessage(),
                 request.getDescription(false),
-                MensajeError.IDENTIFICACION_NO_VALIDO
-        );
+                MensajeError.IDENTIFICACION_NO_VALIDO);
         return new ResponseEntity<>(respuestaError, HttpStatus.BAD_REQUEST);
     }
 
@@ -76,8 +74,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now(),
                 ex.getMessage(),
                 request.getDescription(false),
-                MensajeError.FORMATO_JSON_MALFORMADO
-        );
+                MensajeError.FORMATO_JSON_MALFORMADO);
         return new ResponseEntity<>(respuestaError, HttpStatus.BAD_REQUEST);
     }
 

@@ -22,7 +22,6 @@ public class ClienteRequestProducerService {
         try {
             log.info("Mensage enviado: {}", identification);
             rabbitTemplate.convertAndSend(exchange, routingKey, identification);
-            log.info("Mensage enviado: {}", identification);
         } catch (Exception e) {
             log.error("Error al enviar mensaje: {}", e.getMessage(), e);
         }

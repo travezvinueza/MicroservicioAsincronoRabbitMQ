@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 @AllArgsConstructor
 public class CuentaServiceImpl implements CuentaService {
+
     private final CuentaRepository cuentaRepository;
     private final ModelMapper modelMapper;
     private final ClienteRequestProducerService clienteRequestProducerService;

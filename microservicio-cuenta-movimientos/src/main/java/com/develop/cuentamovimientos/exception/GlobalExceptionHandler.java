@@ -41,8 +41,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now(),
                 exception.getMessage(),
                 webRequest.getDescription(false),
-                MensajeError.SALDO_INSUFICIENTE
-        );
+                MensajeError.SALDO_INSUFICIENTE);
         return new ResponseEntity<>(respuestaError, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(CuentaNoEncontradaException.class)
@@ -53,8 +52,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now(),
                 exception.getMessage(),
                 webRequest.getDescription(false),
-                MensajeError.CUENTA_NO_ENCONTRADA
-        );
+                MensajeError.CUENTA_NO_ENCONTRADA);
         return new ResponseEntity<>(respuestaError, HttpStatus.BAD_REQUEST);
     }
 
@@ -66,8 +64,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now(),
                 exception.getMessage(),
                 webRequest.getDescription(false),
-                MensajeError.RECURSO_NO_ENCONTRADO
-        );
+                MensajeError.RECURSO_NO_ENCONTRADO);
         return new ResponseEntity<>(respuestaError, HttpStatus.BAD_REQUEST);
     }
 
@@ -79,8 +76,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now(),
                 exception.getMessage(),
                 webRequest.getDescription(false),
-                MensajeError.VALOR_DEPOSITO_NO_VALIDO
-        );
+                MensajeError.VALOR_DEPOSITO_NO_VALIDO);
         return new ResponseEntity<>(respuestaError, HttpStatus.BAD_REQUEST);
     }
 
@@ -92,10 +88,10 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now(),
                 exception.getMessage(),
                 webRequest.getDescription(false),
-                MensajeError.VALOR_RETIRO_NO_VALIDO
-        );
+                MensajeError.VALOR_RETIRO_NO_VALIDO);
         return new ResponseEntity<>(respuestaError, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<RespuestaError> handleDateIntegrityViolationException(
             DataIntegrityViolationException ex, WebRequest request
@@ -104,8 +100,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now(),
                 ex.getMessage(),
                 request.getDescription(false),
-                MensajeError.VALOR_YA_REGISTRADO+": " + ex.getMessage().substring(46,51)
-        );
+                MensajeError.VALOR_YA_REGISTRADO+": " + ex.getMessage().substring(46,51));
         return new ResponseEntity<>(respuestaError, HttpStatus.BAD_REQUEST);
     }
 
@@ -117,8 +112,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now(),
                 ex.getMessage(),
                 request.getDescription(false),
-                MensajeError.TIPO_TRANSACCION_NO_VALIDA
-        );
+                MensajeError.TIPO_TRANSACCION_NO_VALIDA);
         return new ResponseEntity<>(respuestaError, HttpStatus.BAD_REQUEST);
     }
 
@@ -128,8 +122,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now(),
                 ex.getMessage(),
                 request.getDescription(false),
-                MensajeError.FORMATO_JSON_MALFORMADO
-        );
+                MensajeError.FORMATO_JSON_MALFORMADO);
         return new ResponseEntity<>(respuestaError, HttpStatus.BAD_REQUEST);
     }
 

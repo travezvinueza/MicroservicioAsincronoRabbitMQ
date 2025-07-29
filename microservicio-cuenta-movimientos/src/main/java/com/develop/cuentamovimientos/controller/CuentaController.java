@@ -45,6 +45,6 @@ public class CuentaController {
 
     @PutMapping
     public ResponseEntity<CuentaDTO> actualizar(@RequestBody CuentaDTO cuentaDTO){
-        return  new ResponseEntity<>(cuentaService.actualizar(cuentaDTO), HttpStatus.OK);
+        return new ResponseEntity<>(cuentaService.actualizar(cuentaDTO), HttpStatus.OK);
     }
 }
